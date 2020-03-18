@@ -1030,9 +1030,233 @@ fangsong@fangsong-FX503VD:~$ date +%H+%M+%S
 ![2020-03-15 09-43-10屏幕截图.png](https://github.com/fangsong0517/Figure-bed/blob/master/2020-03-15%2009-43-10%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png?raw=true)
 ![2020-03-15 09-43-36屏幕截图.png](https://github.com/fangsong0517/Figure-bed/blob/master/2020-03-15%2009-43-36%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE.png?raw=true)
 
+* **/bin**：
+  bin是Binary的缩写, 这个目录存放着最经常使用的命令。
+
+* **/boot：**
+  这里存放的是启动Linux时使用的一些核心文件，包括一些连接文件以及镜像文件。
+
+* **/dev ：**
+  dev是Device(设备)的缩写, 该目录下存放的是Linux的外部设备，在Linux中访问设备的方式和访问文件的方式是相同的。
+
+* **/etc：**
+  这个目录用来存放所有的系统管理所需要的配置文件和子目录。
+
+* **/home**：
+  用户的主目录，在Linux中，每个用户都有一个自己的目录，一般该目录名是以用户的账号命名的。
+
+* **/lib**：
+  这个目录里存放着系统最基本的动态连接共享库，其作用类似于Windows里的DLL文件。几乎所有的应用程序都需要用到这些共享库。
+
+* **/lost+found**：
+  这个目录一般情况下是空的，当系统非法关机后，这里就存放了一些文件。
+
+* **/media**：
+  linux系统会自动识别一些设备，例如U盘、光驱等等，当识别后，linux会把识别的设备挂载到这个目录下。
+
+* **/mnt**：
+  系统提供该目录是为了让用户临时挂载别的文件系统的，我们可以将光驱挂载在/mnt/上，然后进入该目录就可以查看光驱里的内容了。
+
+* **/opt**：
+   这是给主机额外安装软件所摆放的目录。比如你安装一个ORACLE数据库则就可以放到这个目录下。默认是空的。
+
+* **/proc**：
+  这个目录是一个虚拟的目录，它是系统内存的映射，我们可以通过直接访问这个目录来获取系统信息。
+  这个目录的内容不在硬盘上而是在内存里，我们也可以直接修改里面的某些文件，比如可以通过下面的命令来屏蔽主机的ping命令，使别人无法ping你的机器：
+
+* **/root**：
+  该目录为系统管理员，也称作超级权限者的用户主目录。
+
+* **/sbin**：
+  s就是Super User的意思，这里存放的是系统管理员使用的系统管理程序。
+
+* **/selinux**：
+   这个目录是Redhat/CentOS所特有的目录，Selinux是一个安全机制，类似于windows的防火墙，但是这套机制比较复杂，这个目录就是存放selinux相关的文件的。
+
+* **/srv**：
+   该目录存放一些服务启动之后需要提取的数据。
+
+* **/sys**：
+
+   这是linux2.6内核的一个很大的变化。该目录下安装了2.6内核中新出现的一个文件系统 sysfs 。
+
+  sysfs文件系统集成了下面3种文件系统的信息：针对进程信息的proc文件系统、针对设备的devfs文件系统以及针对伪终端的devpts文件系统。该文件系统是内核设备树的一个直观反映。
+
+  当一个内核对象被创建的时候，对应的文件和目录也在内核对象子系统中被创建
+  
+* **/tmp**：
+这个目录是用来存放一些临时文件的。
+  
+* **/usr**：
+ 这是一个非常重要的目录，用户的很多应用程序和文件都放在这个目录下，类似于windows下的program files目录。
+  
+* **/usr/bin：**
+  系统用户使用的应用程序。
+
+* **/usr/sbin：**
+  超级用户使用的比较高级的管理程序和系统守护程序。
+
+* **/usr/src：**
+  内核源代码默认的放置目录。
+
+* **/var**：
+  这个目录中存放着在不断扩充着的东西，我们习惯将那些经常被修改的目录放在这个目录下。包括各种日志文件。
+
+* **/run**：
+  是一个临时文件系统，存储系统启动以来的信息。当系统重启时，这个目录下的文件应该被删掉或清除。如果你的系统上有 /var/run 目录，应该让它指向 run。
+
+**/etc**： 上边也提到了，这个是系统中的配置文件，如果你更改了该目录下的某个文件可能会导致系统不能启动。
+
+**/bin, /sbin, /usr/bin, /usr/sbin**: 这是系统预设的执行文件的放置目录，比如 ls 就是在/bin/ls 目录下的。
+
+值得提出的是，/bin, /usr/bin 是给系统用户使用的指令（除root外的通用户），而/sbin, /usr/sbin 则是给root使用的指令。
+
+**/var**： 这是一个非常重要的目录，系统上跑了很多程序，那么每个程序都会有相应的日志产生，而这些日志就被记录到这个目录下，具体在/var/log 目录下，另外mail的预设放置也是在这里。
+
 # 文件与目录操作
 
+```shell
+[root@www /]# ls -l
+total 64
+dr-xr-xr-x   2 root root 4096 Dec 14  2012 bin
+dr-xr-xr-x   4 root root 4096 Apr 19  2012 boot
+```
 
+实例中，bin文件的第一个属性用"d"表示。"d"在Linux中代表该文件是一个目录文件。
+
+在Linux中第一个字符代表这个文件是目录、文件或链接文件等等。
+
+- 当为[ **d** ]则是目录
+- 当为[ **-** ]则是文件；
+- 若是[ **l** ]则表示为链接文档(link file)；
+- 若是[ **b** ]则表示为装置文件里面的可供储存的接口设备(可随机存取装置)；
+- 若是[ **c** ]则表示为装置文件里面的串行端口设备，例如键盘、鼠标(一次性读取装置)。
+
+![363003_1227493859FdXT](https://www.runoob.com/wp-content/uploads/2014/06/363003_1227493859FdXT.png)
+
+#### chgrp：更改文件属组
+
+语法：
+
+```
+chgrp [-R] 属组名 文件名
+```
+
+参数选项
+
+- -R：递归更改文件属组，就是在更改某个目录文件的属组时，如果加上-R的参数，那么该目录下的所有文件的属组都会更改。
+
+#### chown：更改文件属主，也可以同时更改文件属组
+
+语法：
+
+```
+chown [–R] 属主名 文件名
+chown [-R] 属主名：属组名 文件名
+```
+
+进入 /root 目录（~）将install.log的拥有者改为bin这个账号：
+
+```shell
+[root@www ~] cd ~
+[root@www ~]# chown bin install.log
+[root@www ~]# ls -l
+-rw-r--r--  1 bin  users 68495 Jun 25 08:53 install.log
+```
+
+将install.log的拥有者与群组改回为root：
+
+```shell
+[root@www ~]# chown root:root install.log
+[root@www ~]# ls -l
+-rw-r--r--  1 root root 68495 Jun 25 08:53 install.log
+```
+
+#### chmod：更改文件9个属性
+
+Linux文件属性有两种设置方法，一种是数字，一种是符号。
+
+Linux文件的基本权限就有九个，分别是owner/group/others三种身份各有自己的read/write/execute权限。
+
+先复习一下刚刚上面提到的数据：文件的权限字符为：『-rwxrwxrwx』， 这九个权限是三个三个一组的！其中，我们可以使用数字来代表各个权限，各权限的分数对照表如下：
+
+- r:4
+- w:2
+- x:1
+
+每种身份(owner/group/others)各自的三个权限(r/w/x)分数是需要累加的，例如当权限为： [-rwxrwx---] 分数则是：
+
+- owner = rwx = 4+2+1 = 7
+- group = rwx = 4+2+1 = 7
+- others= --- = 0+0+0 = 0
+
+所以等一下我们设定权限的变更时，该文件的权限数字就是770啦！变更权限的指令chmod的语法是这样的：
+
+```shell
+ chmod [-R] xyz 文件或目录
+```
+
+选项与参数：
+
+- xyz : 就是刚刚提到的数字类型的权限属性，为 rwx 属性数值的相加。
+- -R : 进行递归(recursive)的持续变更，亦即连同次目录下的所有文件都会变更
+
+举例来说，如果要将.bashrc这个文件所有的权限都设定启用，那么命令如下：
+
+```shell
+[root@www ~]# ls -al .bashrc
+-rw-r--r--  1 root root 395 Jul  4 11:45 .bashrc
+[root@www ~]# chmod 777 .bashrc
+[root@www ~]# ls -al .bashrc
+-rwxrwxrwx  1 root root 395 Jul  4 11:45 .bashrc
+```
+
+那如果要将权限变成 *-rwxr-xr--* 呢？那么权限的分数就成为 [4+2+1][4+0+1][4+0+0]=754。
+
+#### 符号类型改变文件权限
+
+还有一个改变权限的方法，从之前的介绍中我们可以发现，基本上就九个权限分别是：
+
+- (1)user
+- (2)group
+- (3)others
+
+那么我们就可以使用 **u, g, o** 来代表三种身份的权限！
+
+此外， **a** 则代表 **all**，即全部的身份。读写的权限可以写成 **r, w, x**，也就是可以使用下表的方式来看：
+
+|       |      |         |      |            |
+| ----- | ---- | ------- | ---- | ---------- |
+|       | u    | +(加入) | r    |            |
+| chmod | g    | -(除去) | w    | 文件或目录 |
+|       | o    | =(设定) | x    |            |
+|       | a    |         |      |            |
+
+
+
+如果我们需要将文件权限设置为 **-rwxr-xr--** ，可以使用 **chmod u=rwx,g=rx,o=r 文件名** 来设定:
+
+```shell
+#  touch test1    // 创建 test1 文件
+# ls -al test1    // 查看 test1 默认权限
+-rw-r--r-- 1 root root 0 Nov 15 10:32 test1
+# chmod u=rwx,g=rx,o=r  test1    // 修改 test1 权限
+# ls -al test1
+-rwxr-xr-- 1 root root 0 Nov 15 10:32 test1
+```
+
+而如果是要将权限去掉而不改变其他已存在的权限呢？例如要拿掉全部人的可执行权限，则：
+
+```shell
+#  chmod  a-x test1
+# ls -al test1
+-rw-r--r-- 1 root root 0 Nov 15 10:32 test1
+```
+
+- **绝对路径：**
+  路径的写法，由根目录 / 写起，例如： /usr/share/doc 这个目录。
+- **相对路径：**
+  路径的写法，不是由 / 写起，例如由 /usr/share/doc 要到 /usr/share/man 底下时，可以写成： cd ../man 这就是相对路径的写法啦！
 
 #### CD切换工作目录
 
@@ -1052,20 +1276,98 @@ L 显示逻辑工作目录
 P 显示物理工作目录
 ```
 
+pwd 是 **Print Working Directory** 的缩写，也就是显示目前所在目录的命令。
+
+```
+[root@www ~]# pwd [-P]
+```
+
+选项与参数：
+
+- **-P** ：显示出确实的路径，而非使用连结 (link) 路径。
+
+实例：单纯显示出目前的工作目录：
+
+```shell
+[root@www ~]# pwd
+/root   <== 显示出目录啦～
+```
+
+实例显示出实际的工作目录，而非连结档本身的目录名而已。
+
+```shell
+[root@www ~]# cd /var/mail   <==注意，/var/mail是一个连结档
+[root@www mail]# pwd
+/var/mail         <==列出目前的工作目录
+[root@www mail]# pwd -P
+/var/spool/mail   <==怎么回事？有没有加 -P 差很多～
+[root@www mail]# ls -ld /var/mail
+lrwxrwxrwx 1 root root 10 Sep  4 17:54 /var/mail -> spool/mail
+# 看到这里应该知道为啥了吧？因为 /var/mail 是连结档，连结到 /var/spool/mail 
+# 所以，加上 pwd -P 的选项后，会不以连结档的数据显示，而是显示正确的完整路径啊！
+```
+
 #### MkDIR创建目录
 
 ```shell
--p 自动创建父目录
--m 设置权限
+-p 自动创建父目录：帮助你直接将所需要的目录(包含上一级目录)递归创建起来！
+-m 设置权限：配置文件的权限喔！直接配置，不需要看默认权限 (umask) 的脸色～
 ```
+
+实例：请到/tmp底下尝试创建数个新目录看看：
+
+```shell
+[root@www ~]# cd /tmp
+[root@www tmp]# mkdir test    <==创建一名为 test 的新目录
+[root@www tmp]# mkdir test1/test2/test3/test4
+mkdir: cannot create directory `test1/test2/test3/test4': 
+No such file or directory       <== 没办法直接创建此目录啊！
+[root@www tmp]# mkdir -p test1/test2/test3/test4
+```
+
+加了这个 -p 的选项，可以自行帮你创建多层目录！
+
+实例：创建权限为 **rwx--x--x** 的目录。
+
+```shell
+[root@www tmp]# mkdir -m 711 test2
+[root@www tmp]# ls -l
+drwxr-xr-x  3 root  root 4096 Jul 18 12:50 test
+drwxr-xr-x  3 root  root 4096 Jul 18 12:53 test1
+drwx--x--x  2 root  root 4096 Jul 18 12:54 test2
+```
+
+上面的权限部分，如果没有加上 -m 来强制配置属性，系统会使用默认属性。
+
+如果我们使用 -m ，如上例我们给予 -m 711 来给予新的目录 drwx--x--x 的权限。
 
 #### RMDIR删除目录
 
 ```shell
 p删除祖先
+-p ：连同上一级『空的』目录也一起删除
 ```
 
+删除 runoob 目录
+
+```
+[root@www tmp]# rmdir runoob/
+```
+
+将 mkdir 实例中创建的目录(/tmp 底下)删除掉！
+
+```
+[root@www tmp]# rmdir -p test1/test2/test3/test4
+[root@www tmp]# ls -l        <==您看看，底下的输出中test与test1不见了！
+```
+
+利用 -p 这个选项，立刻就可以将 test1/test2/test3/test4 一次删除。
+
+不过要注意的是，这个 rmdir 仅能删除空的目录，你可以使用 rm 命令来删除非空目录。
+
 #### CP
+
+cp 即拷贝文件和目录。
 
 ```shell
 -i :若文件存在，询问用户
@@ -1078,21 +1380,73 @@ p删除祖先
 -u：原文件比目的文件新才拷贝
 ```
 
-#### RM
+用 root 身份，将 root 目录下的 .bashrc 复制到 /tmp 下，并命名为 bashrc
 
 ```shell
--i :互动模式
--r :递归删除
--f：force
+[root@www ~]# cp ~/.bashrc /tmp/bashrc
+[root@www ~]# cp -i ~/.bashrc /tmp/bashrc
+cp: overwrite `/tmp/bashrc'? n  <==n不覆盖，y为覆盖
 ```
+
+#### RM
+
+```
+ rm [-fir] 文件或目录
+```
+
+```shell
+-i :互动模式互动模式，在删除前会询问使用者是否动作
+-r :递归删除递归删除啊！最常用在目录的删除了！这是非常危险的选项！！！
+-f：force忽略不存在的文件，不会出现警告信息；
+```
+
+
+
+
 
 #### MV
 
+移动文件与目录，或修改名称
+
 ```shell
--i :互动模式
--f：force
--u:源文件跟新才会移动
+[root@www ~]# mv [-fiu] source destination
+[root@www ~]# mv [options] source1 source2 source3 .... directory
 ```
+
+```shell
+-i :互动模式若目标文件 (destination) 已经存在时，就会询问是否覆盖！
+-f：force强制的意思，如果目标文件已经存在，不会询问而直接覆盖；
+-u:源文件跟新才会移动若目标文件已经存在，且 source 比较新，才会升级 (update)
+```
+
+复制一文件，创建一目录，将文件移动到目录中
+
+```
+[root@www ~]# cd /tmp
+[root@www tmp]# cp ~/.bashrc bashrc
+[root@www tmp]# mkdir mvtest
+[root@www tmp]# mv bashrc mvtest
+```
+
+将某个文件移动到某个目录去，就是这样做！
+
+将刚刚的目录名称更名为 mvtest2
+
+```
+[root@www tmp]# mv mvtest mvtest2
+```
+
+### Linux 文件内容查看
+
+Linux系统中使用以下命令来查看文件的内容：
+
+- cat 由第一行开始显示文件内容
+- tac 从最后一行开始显示，可以看出 tac 是 cat 的倒著写！
+- nl  显示的时候，顺道输出行号！
+- more 一页一页的显示文件内容
+- less 与 more 类似，但是比 more 更好的是，他可以往前翻页！
+- head 只看头几行
+- tail 只看尾巴几行
 
 #### CAT
 
@@ -1101,19 +1455,42 @@ p删除祖先
 -v:列出看不到的字符
 -E:显示断行符为￥
 -T：显示TAB为^I
--b:列出行号
+-b:列出行号列出行号，仅针对非空白行做行号显示，空白行不标行号！
 -n:列出行号，空行也编号
+```
+
+#### TAC
+
+tac与cat命令刚好相反，文件内容从最后一行开始显示，可以看出 tac 是 cat 的倒着写！如：
+
+```shell
+[root@www ~]# tac /etc/issue
+
+Kernel \r on an \m
+CentOS release 6.4 (Final)
 ```
 
 #### NL输出行号显示文件
 
+```
+nl [-bnw] 文件
+```
+
 ```shell
--b a:相当于cat -a
--b t:相当于cat -b
+-b a:相当于cat -a表示不论是否为空行，也同样列出行号
+-b t:相当于cat -b如果有空行，空的那一行不要列出行号
 -n ln:行号在屏幕的最左边显示
--n rn:行号在自己字段的最右边显示
+-n rn:行号在自己字段的最右边显示且不加 0 
 -n rz:行号在自己字段的最右边显示，前面自动补0
 -w <num>：行号所占位数
+```
+
+实例一：用 nl 列出 /etc/issue 的内容
+
+```
+[root@www ~]# nl /etc/issue
+     1  CentOS release 6.4 (Final)
+     2  Kernel \r on an \m
 ```
 
 #### HEAD查看头几行
@@ -1124,12 +1501,26 @@ head [-n num] <file>
 -n -num:除后几行外，其他都显示
 ```
 
-#### TAIL查看末尾几行
+取出文件前面几行
 
-```shell
-tail [-n num] <file>
--n num:显示文件后num行
--n +num:除前几行外，其他都显示
+语法：
+
+```
+head [-n number] 文件 
+```
+
+选项与参数：
+
+- -n ：后面接数字，代表显示几行的意思
+
+```
+[root@www ~]# head /etc/man.config
+```
+
+默认的情况中，显示前面 10 行！若要显示前 20 行，就得要这样：
+
+```
+[root@www ~]# head -n 20 /etc/man.config
 ```
 
 #### TAIL查看末尾几行
@@ -1138,6 +1529,17 @@ tail [-n num] <file>
 tail [-n num] <file>
 -n num:显示文件后num行
 -n +num:除前几行外，其他都显示
+```
+
+选项与参数：
+
+- -n ：后面接数字，代表显示几行的意思
+- -f ：表示持续侦测后面所接的档名，要等到按下[ctrl]-c才会结束tail的侦测
+
+```
+[root@www ~]# tail /etc/man.config
+# 默认的情况中，显示最后的十行！若要显示最后的 20 行，就得要这样：
+[root@www ~]# tail -n 20 /etc/man.config
 ```
 
 #### 文件时间及隐藏属性
@@ -1680,3 +2082,306 @@ for i in `ls`; do
 
 
 
+# 用户管理
+
+### **用户管理的重要配置文件**
+
+| 配置文件     | 内容                                                      |
+| ------------ | --------------------------------------------------------- |
+| /etc/passwd  | 用户名　密码为　用户编号　归属组编号　姓名　$HOME　$SHELL |
+| /etc/shadow  | 用户名　已加密密码　密码改动信息　密码策略                |
+| /etc/group   | 群组名　密码为　群组编号　组内用户                        |
+| /etc/gshadow | 群组密码相关文件                                          |
+| /etc/sudoers | 用户名　权限定义　权限(sudo)                              |
+
+#### **/etc/password文件说明**
+
+```shell
+fangsong@fangsong-FX503VD:/etc$ cat passwd
+root:x:0:0:root:/root:/bin/bash
+daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin
+bin:x:2:2:bin:/bin:/usr/sbin/nologin
+sys:x:3:3:sys:/dev:/usr/sbin/nologin
+sync:x:4:65534:sync:/bin:/bin/sync
+```
+
+| root     | x    | 0    | 0    | root     | /root | /bin/bash |
+| -------- | ---- | ---- | ---- | -------- | ----- | --------- |
+| 账户名称 | 密码 | uid  | gid  | 用户信息 | $HOME | SHELL     |
+
+#### **/etc/shadow文件说明**
+
+```shell
+root:!:18225:0:99999:7:::
+daemon:*:18002:0:99999:7:::
+bin:*:18002:0:99999:7:::
+sys:*:18002:0:99999:7:::
+```
+
+| root     | !    | 18225          | 0                | 99999                | 7                    | null               | null         | null |
+| -------- | ---- | -------------- | ---------------- | -------------------- | -------------------- | ------------------ | ------------ | ---- |
+| 账户名称 | 密码 | 修改密码的日期 | 密码不可更改日期 | 密码需要重新修改日期 | 密码更新期限清高日期 | 密码过期的宽限时间 | 账户失效日期 | 保留 |
+
+#### **/etc/group文件说明**
+
+```
+adm:x:4:syslog,fangsong
+tty:x:5:
+disk:x:6:
+```
+
+| adm  | x        | 4    | syslog,fangsong |
+| ---- | -------- | ---- | --------------- |
+| 组名 | 群组密码 | gid  | 支持的账户      |
+
+#### **/etc/gshadow文件说明**
+
+```
+lpadmin:!::fangsong,saned
+scanner:!::
+avahi:!::
+```
+
+| lpadmin | !    | null       | fangsong,saned       |
+| ------- | ---- | ---------- | -------------------- |
+| 组名    | 密码 | 群组管理员 | 加入该群组的所属账号 |
+
+
+
+### **用户管理相关的命令**
+
+| 命令    | 说明          | 命令    | 说明             |
+| ------- | ------------- | ------- | ---------------- |
+| su      | 切换用户      | sudo    | 临时切换root用户 |
+| passwd  | 设定用户密码  | gpasswd | 设定群组密码     |
+| chsh    | 更改用户shell | usermod | 修改用户账号     |
+| useradd | 新建用户      | userdel | 删除用户         |
+| id      | 显示用户信息  | ...     | ．．．           |
+
+#### su命令
+
+>su [-lmpfc] <username>
+>
+>-l | -1 :重新登录
+>
+>-m | -p:不改变环境变量
+>
+>-c comand:切换后执行命令，并退出
+
+####　sudo命令
+
+>sudo [-siul] <command>
+>
+>-s :切换为root shell
+>
+>-i:切换为root shell ，并初始化
+>
+>-u username | uid：执行命令身份
+>
+>-1:显示自己的权限
+
+#### passwd命令
+
+>passwd [-dleSxnf] <username>
+>
+>-d:清除密码
+>
+>-l:锁定用户
+>
+>-e:使密码过期
+>
+>-S:显示密码认证信息
+>
+>-x days:密码过期后最大使用天数
+>
+>-n days:密码冻结后最小使用时间
+>
+>-s:更改登录shell
+>
+>-f:更改用户信息
+
+#### gpasswd命令
+
+>gpasswd [-adeAm]<群组名>
+>
+>-a username :将用户加入群组
+>
+>-d username :将用户从群组中删除
+>
+>-r :删除密码
+>
+>-A username:将用户设置为群组管理员
+>
+>-M username1,username2...:设置为群成员
+
+#### chsh命令
+
+>chsh -s shell <username>
+
+```shell
+fangsong@fangsong-FX503VD:~$ chsh -s /bin/sh fangsong
+密码： 
+fangsong@fangsong-FX503VD:~$ su - fangsong
+密码： 
+$ echo $SHELL
+/bin/sh
+$ exit
+fangsong@fangsong-FX503VD:~$ chsh -s /bin/bash fangsong
+密码： 
+fangsong@fangsong-FX503VD:~$ su - fangsong
+密码： 
+Good evening. 天行健，君子以自强不息；地势坤，君子以厚德载物！
+Please input the username: fangsong
+fangsong is online.
+fangsong@fangsong-FX503VD:~$ echo $SHELL
+/bin/bash
+fangsong@fangsong-FX503VD:~$ 
+```
+
+#### useradd命令添加新的用户账号
+
+```
+useradd 选项 用户名
+```
+
+>useradd [-dMsugGnefcD] <username>
+>
+>-d dir:指定$HOME
+>
+>-m:自动建立$HOME
+>
+>-M:不自动建立$HOME
+>
+>-s shell:设置用户登录ｓｈｅｌｌ
+>
+>-u uid:设置用户编号
+>
+>-g groupname:设定用户归属群组
+>
+>-G groupname:设置用户归属附加群组
+>
+>-n:不建立以用户名称为群组名称的群组
+>
+>-e days:设置账号过期时间
+>
+>-f days:缓冲时间,days天后关闭账号
+>
+>-c string:设置用户备注
+>
+>-D[表达式]:更改预设值
+
+>/etc/login.defs新建用户规则
+>
+>/etc/skel/新建用户默认文件
+
+实例1
+
+```
+# useradd –d  /home/sam -m sam
+```
+
+此命令创建了一个用户sam，其中-d和-m选项用来为登录名sam产生一个主目录 /home/sam（/home为默认的用户主目录所在的父目录）。
+
+实例2
+
+```
+# useradd -s /bin/sh -g group –G adm,root gem
+```
+
+此命令新建了一个用户gem，该用户的登录Shell是 `/bin/sh`，它属于group用户组，同时又属于adm和root用户组，其中group用户组是其主组。
+
+这里可能新建组：`#groupadd group及groupadd adm`
+
+增加用户账号就是在/etc/passwd文件中为新用户增加一条记录，同时更新其他系统文件如/etc/shadow, /etc/group等。
+
+Linux提供了集成的系统管理工具userconf，它可以用来对用户账号进行统一管理。
+
+####　userdel 用户名删除帐号
+
+>userdel -r <username>
+>
+>-r :删除用户相关文件和目录
+
+如果一个用户的账号不再使用，可以从系统中删除。删除用户账号就是要将/etc/passwd等系统文件中的该用户记录删除，必要时还删除用户的主目录。
+
+删除一个已有的用户账号使用`userdel`命令，其格式如下：
+
+```
+userdel 选项 用户名
+```
+
+常用的选项是 **-r**，它的作用是把用户的主目录一起删除。
+
+例如：
+
+```
+# userdel -r sam
+```
+
+此命令删除用户sam在系统文件中（主要是/etc/passwd, /etc/shadow, /etc/group等）的记录，同时删除用户的主目录。
+
+#### usermode 命令
+
+>usermod [-cdefgGlLsuU] <username>
+>
+>-c string :修改备注信息
+>
+>-d dir:修改$HOME
+>
+>-e dats:密码期限
+>
+>-f days:密码过期后宽限的日期
+>
+>-g groupname:修改用户所属群组
+>
+>-G groupname:修改用户所属附加群组
+
+#### usermod 命令修改帐号
+
+>usermod [-defgGlLsuU]<username>
+>
+>-l username : 修改用户账号名称
+>
+>-L:锁定用户密码，使密码无效
+>
+>-s shell:修改用户登录后所使用的shell
+>
+>-u uid:修改用户ID
+>
+>-U:接除密码锁定
+
+修改用户账号就是根据实际情况更改用户的有关属性，如用户号、主目录、用户组、登录Shell等。
+
+修改已有用户的信息使用`usermod`命令，其格式如下：
+
+```
+usermod 选项 用户名
+```
+
+常用的选项包括`-c, -d, -m, -g, -G, -s, -u以及-o等`，这些选项的意义与`useradd`命令中的选项一样，可以为用户指定新的资源值。
+
+另外，有些系统可以使用选项：-l 新用户名
+
+这个选项指定一个新的账号，即将原来的用户名改为新的用户名。
+
+例如：
+
+```
+# usermod -s /bin/ksh -d /home/z –g developer sam
+```
+
+此命令将用户sam的登录Shell修改为ksh，主目录改为/home/z，用户组改为developer。
+
+####　id命令
+
+>id [-gGnru]<username>
+>
+>-g :下属所属组ID
+>
+>-G:显示附加组ID
+>
+>-n:显示用户，所属组，或附加群组的名称
+>
+>-u:显示用户ID
+>
+>-r:显示实际ID
