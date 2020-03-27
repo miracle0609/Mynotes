@@ -229,3 +229,129 @@ n, num[15]记录，cnt 计数
 题解: 
 
 改进的236题;首先有一个记录路径的，而且还要记录元音和辅音有多少个为了当走了合法left时而且元音辅音符合条件时才能满足打印情况，就是这样。
+
+#### #`538图的遍历`
+
+[题目](http://oj.haizeix.com/problem/538)
+
+已知结点个数，必须整一个标记数组check[], 当没走过的进行遍历周围所能到达的
+
+![Whiteboard[2]-01](%E9%80%92%E5%BD%92%E4%B8%8EDFS.assets/Whiteboard%5B2%5D-01.png)
+
+```c
+void func(int x) {
+    if(flag == 1) {
+        cout << "-";
+    }
+    flag = 1;
+    cout << x;
+    for(int i = 1; i <= n; i++) {
+        if(num[x][i] == 1 && check[i] == 0) {
+            check[i] = 1;
+            func(i);
+        }
+    }
+}
+```
+
+#### #`540生日购物`
+
+[题目](http://oj.haizeix.com/problem/540)
+
+由于题目N <= 40, 最大40由于很大,达到2 ^ 40多；会超时，因此将其分为两部分进行处理，一部分0 ~ 20 ,21~40进行处理；和235题近似
+
+![image-20200327173733020](%E9%80%92%E5%BD%92%E4%B8%8EDFS.assets/image-20200327173733020.png) 
+
+#### #`541相遇问题`
+
+[题目](http://oj.haizeix.com/problem/541)
+
+对于每个人来讲，把他走到ｎ号点的时间都存起来，最后会得到两个人的数组，找两个数组中是否有一样的；邻接矩阵进行存储；
+
+```c
+        cin >> a >> b >> c >> d;
+        atime[0][a][b] = atime[0][b][a] = c;
+        atime[1][a][b] = atime[1][b][a] = d;
+```
+
+```c
+int n, m, atime[2][20][20], ans[2][100000], ans_num[2];
+//atime 存时间, ans存到达所需要的时间，ans_num计数
+void func(int people, int locate, int cost) {
+    if(locate == n) {
+        ans[people][ans_num[people]] = cost;
+        ans_num[people]++;
+        return;
+    }
+    for(int i = locate + 1; i <= n; i++) {
+        if(atime[people][locate][i]) {
+            func(people, i, cost + atime[people][locate][i]);
+        }
+    }
+}
+```
+
+
+
+#### #`542奶酪`
+
+[题目](http://oj.haizeix.com/problem/542)
+
+![image-20200327220747451](%E9%80%92%E5%BD%92%E4%B8%8EDFS.assets/image-20200327220747451.png)
+
+求上下表面数组：
+
+```c
+ cin >>qiu[i][0] >> qiu[i][1] >> qiu[i][2];
+            if(qiu[i][2] <= r) {
+                low[low_num++] = i;
+            }
+            if(qiu[i][2] + r >= h) {
+                up[i] = 1;
+            }
+```
+
+构建邻接矩阵：
+
+```c
+  for(int j = 1; j < i; j++) {
+                int t0 = qiu[i][0] - qiu[j][0];
+                int t1 = qiu[i][1] - qiu[j][1];
+                int t2 = qiu[i][2] - qiu[j][2];
+                if(sqrt(t0 * t0 + t1 * t1 + t2 * t2) <= 2 * r) {
+                    arr[i][j] = arr[j][i] = 1;
+                }
+            }
+```
+
+遍历下表面进行搜索
+
+```c
+    for(int i = 0; i <= low_num; i++) {
+            if(check[i] == 0) {
+                check[i] = 1;
+                if(dfs(i)) {
+                    cout << "Yes" << endl;
+                flag = 1;
+                    break;
+                }
+            }
+        }
+```
+
+dfs函数：
+
+```c
+
+int dfs(int now) {
+    if(up[now] == 1) return 1;
+    for(int i = 1; i <= n; i++) {
+        if(arr[now][i] && check[i] == 0) {
+            check[i] = 1;
+            if(func(i)) return 1;
+        }
+    }
+    return 0;
+}
+```
+
