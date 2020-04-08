@@ -355,3 +355,59 @@ int dfs(int now) {
 }
 ```
 
+
+
+#### #`81小明回家`
+
+[题目](http://oj.haizeix.com/problem/81)
+
+
+
+
+
+#### #`303 矩阵距离一`
+
+[题目](http://oj.haizeix.com/problem/303)
+
+
+
+
+
+
+
+#### #`304骑士风度的牛`
+
+[题目](http://oj.haizeix.com/problem/304)
+
+
+
+
+
+#### #`305 乳草的入侵`
+
+[题目](http://oj.haizeix.com/problem/305)
+
+
+
+
+
+#### #`398马的遍历 `
+
+[题目](http://oj.haizeix.com/problem/398)
+
+
+
+
+
+#### #`527飞跃原野`
+
+[题目](http://oj.haizeix.com/problem/527)
+
+
+
+
+
+#### #`529龙与虫`
+
+[题目](http://oj.haizeix.com/problem/529)
+
