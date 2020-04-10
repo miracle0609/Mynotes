@@ -2,9 +2,8 @@
 	> File Name: 1.Vector.cpp
 	> Author:fangsong
 	> Mail: 
-	> Created Time: 2020年03月08日 星期日 20时29分54秒
+	> Created Time: 2020年02月11日 星期二 14时53分53秒
  ************************************************************************/
-
 #include<stdio.h>
 #include<stdlib.h>
 #include<time.h>
@@ -24,7 +23,7 @@ Vector *init(int n) {
 int expand(Vector *vec) {
     int *old_data = vec->data;
     vec->size *= 2;
-    vec->data = (int *)malloc(sizeof(int) *vec->size);
+    vec->data = (int *)malloc(sizeof(int) * vec->size);
     for(int i = 0; i < vec->length; i++) {
         vec->data[i] = old_data[i];
     }
@@ -36,8 +35,8 @@ int expand2(Vector *vec) {
     int extr_size = vec->size;
     int *p;
     while(extr_size) {
-        p = (int *)realloc(vec->data, sizeof(int) *(vec->size + extr_size));
-        if(p) break;
+        p = (int *)realloc(vec->data, sizeof(int) * (vec->size + extr_size));
+        if(p)break;
         extr_size /= 2;
     }
     if(p == NULL) return 0;
@@ -50,7 +49,7 @@ int insert(Vector *vec, int ind, int val) {
     if(vec == NULL) return 0;
     if(ind < 0 || ind > vec->length) return 0;
     if(vec->length == vec->size) {
-        if(!expand(vec))return 0;
+        if(!expand(vec)) return 0;
         printf("expand successfully ! size = %d\n", vec->size);
     }
     for(int i = vec->length; i > ind; i--) {
@@ -62,12 +61,12 @@ int insert(Vector *vec, int ind, int val) {
 }
 
 int erase(Vector *vec, int ind) {
-    if(vec == NULL)return 0;
+    if(vec == NULL) return 0;
     if(ind < 0 || ind >= vec->length) return 0;
     for(int i = ind + 1; i < vec->length; i++) {
-        vec->data[ i - 1] = vec->data[i]; 
+        vec->data[i - 1] = vec->data[i];
     }
-    vec->length -= 1;
+    vec->length-=1;
     return 1;
 }
 
@@ -75,14 +74,15 @@ void output(Vector *vec) {
     printf("Vector(%d) = [", vec->length);
     for(int i = 0; i < vec->length; i++) {
         i && printf(", ");
-        printf("%d", vec->data[i]);
+        printf("%d",vec->data[i]);
+
     }
     printf("]\n");
     return;
 }
 
 void clear(Vector *vec) {
-    if(vec == NULL)return;
+    if(vec == NULL) return;
     free(vec->data);
     free(vec);
     return;
@@ -100,16 +100,15 @@ int main() {
         switch(op) {
             case 0:
             case 1:
-            case 2: {
-                printf("insert %d at %d to Vector = %d\n", val , ind, insert(vec, ind, val));
+            case 2:{
+                printf("insert %d at %d to Vector = %d\n",val, ind, insert(vec, ind, val));
             }break;
-            case 3: {
-                printf("erase item at %d from Vector = %d\n", ind, erase(vec, ind));
+            case 3:{
+                printf("earse item at %d from Vector = %d\n", ind, erase(vec, ind));
             }break;
         }
-        output(vec);
-printf("\n");
-
+            output(vec);
+            printf("\n");
     }
     clear(vec);
     return 0;
