@@ -22,4 +22,6 @@
 #include <sys/time.h>
 #include <poll.h>
 #include <sys/select.h>
+#include <errno.h>
+
 #endif
