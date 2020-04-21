@@ -21,3 +21,94 @@
 (2)删除出度为2的结点
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/20200421230205133.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzQzNTIxNjcw,size_16,color_FFFFFF,t_70)
 
+```cpp
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+typedef struct Node {//结构定义二叉树
+    int key;
+    struct Node *lchild, *rchild;
+} Node;
+
+Node *getNewNode(int key) {
+    Node *p = (Node *)malloc(sizeof(Node));
+    p->key = key;
+    p->lchild = p->rchild = NULL;
+    return p;
+}
+
+Node *predeccessor(Node *root) {//找到前驱,就是最左边的最右结点
+    Node *temp = root->lchild;
+    while (temp->rchild) temp = temp->rchild;
+    return temp;
+}
+
+Node *insert(Node *root, int key) {//插入
+    if (root == NULL) return getNewNode(key);
+    if (root->key == key) return root;//如果插入的值等于根，插入失败
+    if (root->key > key) root->lchild = insert(root->lchild, key);//如果插入的值小于root往左插入
+    else root->rchild = insert(root->rchild, key);//如果插入的值大于root往右递归插入
+    return root;
+}
+
+Node *erase(Node *root, int key) {//删除节点
+    if (root == NULL) return root;
+    if (root->key > key) {
+        root->lchild = erase(root->lchild, key);//如果删除的值小于root那么向左递归查找删除
+    } else if (root->key < key) {//如果删除的值大于于root那么向右递归查找删除
+        root->rchild = erase(root->rchild, key);
+    } else {//找到
+        if (root->lchild == NULL || root->rchild == NULL) {//如果度为0或者1时
+            Node *temp = root->lchild ? root->lchild : root->rchild;//建立一个中间变量记录左右结点，0度结点记录为空
+            free(root);//释放此节点
+            return temp;//返回记录的他的做孩子还是右孩子
+        } else {//删除度为２
+            Node *temp = predeccessor(root);//找到前驱，左边最大的一个节点，最右边的
+            root->key = temp->key;//赋值为根
+            root->lchild = erase(root->lchild, temp->key);//然后从根把其左子树递归删除释放掉
+        }
+    }
+    return root;
+}
+
+void clear(Node *root) {
+    if (root == NULL) return ;
+    clear(root->lchild);
+    clear(root->rchild);
+    free(root);
+    return ;
+}
+
+void output(Node *root) {
+    if (root == NULL) return ;
+    output(root->lchild);
+    printf("%d ", root->key);
+    output(root->rchild);
+    return ;
+}
+
+int main() {
+    srand(time(0));
+    #define MAX_OP 30
+    Node *root = NULL;
+    for (int i = 0; i < MAX_OP; i++) {
+        int op = rand() % 5, val = rand() % 20;
+        switch (op) {
+            case 2:
+            case 3:
+            case 4:
+            case 0: {
+                printf("insert %d to binary search tree\n", val);
+                root = insert(root, val);
+            } break;
+            case 1: {
+                printf("earse %d from binary search tree\n", val);
+                root = erase(root, val);
+            } break;
+        }
+        output(root), printf("\n");
+    }
+    return 0;
+}
+```
