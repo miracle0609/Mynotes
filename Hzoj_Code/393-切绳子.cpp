@@ -20,15 +20,15 @@ double num[10005], mmax;
 int check(double mid) {
     int cnt = 0;
     for(int i = 0; i < n; i++){
-        cnt+=num[i] / mid;
+        cnt += num[i] / mid;
     }
     return cnt;
 }
 
 double func() {
     double l = 0, r = mmax;
-    while(r - l > 0.00001) {
-        double mid = (l + r)/ 2;
+    while(r - l > 0.000001) {
+        double mid = (l + r) / 2;
         int x = check(mid);
         if(x >= k) {
             l = mid;
@@ -38,6 +38,7 @@ double func() {
     }
     return l;
 }
+
 int main() {
     ios::sync_with_stdio(false);
     cin >> n >> k;
@@ -46,6 +47,6 @@ int main() {
         mmax = max(mmax, num[i]);
     }
     double ans = func();
-    printf("%d.%d%d\n", (int)ans, (int)(ans * 100)%10,(int)(ans * 100) % 10);
+    printf("%d.%d\n", (int)ans, (int)(ans * 100)%100);
     return 0;
 }
