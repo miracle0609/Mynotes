@@ -63,7 +63,7 @@ int main() {
     for (auto iter =ind.begin(); iter != ind.end(); iter++) {
         iter->second = (++ind_cnt);
     }
-  /*  for(int i = 0; i < m; i++) {
+    /*for(int i = 0; i < m; i++) {
         cout << ind[arr[i].x] << " " << ind[arr[i].y] << endl;
     }*/
     init(ind_cnt);
