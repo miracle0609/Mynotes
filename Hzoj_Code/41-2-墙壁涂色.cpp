@@ -23,11 +23,10 @@ struct BigInt: public vector<int> {
     }
     BigInt operator *(int x) {
         BigInt ret(*this);
-        for(int i = 0; i < ret.size(); i++) {
+        for(int i = 0; i < ret.size(); i++)
             ret[i] *= x;
             ret.normal();
             return ret;
-        }
     }
     BigInt operator+(const BigInt &a){
         BigInt ret(*this);
@@ -35,6 +34,7 @@ struct BigInt: public vector<int> {
             if(i < ret.size())ret[i] += a[i];
             else ret.push_back(a[i]);
         }
+        ret.normal();
         return ret;
     }
     void normal() {
