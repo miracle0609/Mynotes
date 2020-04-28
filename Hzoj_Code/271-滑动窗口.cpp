@@ -57,10 +57,8 @@ int main() {
     cin >> n >> k;
     for(int i = 1; i <= n; i++) cin >> a[i];
     for(int i = 1; i <= n; i++) {
-        while(tail - head && a[q[tail - 1]] >= a[i]) tail --;
+        while(tail - head && a[q[tail - 1]] >= a[i]) tail --; //维护单调性
         q[tail++] = i;
-
-
         if(q[head] <= i - k) head ++;
         if(i < k)continue;
         i == k || cout << " ";
