@@ -62,6 +62,7 @@ int main() {
         if(q[head] <= i - k) head ++;//已出队列
         if(i < k)continue;
         i == k || cout << " ";
+        cout << "head = " <<  head  << ", tail = " << tail << endl;
         cout << a[q[head]];//头部存最小的
     }
     cout << endl;
