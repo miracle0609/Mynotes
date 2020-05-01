@@ -411,3 +411,349 @@ int dfs(int now) {
 
 [题目](http://oj.haizeix.com/problem/529)
 
+
+
+
+
+## 单调队列
+
+```cpp
+#include<iostream>
+#include<cstdio>
+#include<cmath>
+#include<cstring>
+#include<iomanip>
+#include<algorithm>
+#include<map>
+#include<vector>
+using namespace std;
+#define MAX_N 300000
+int a[MAX_N + 5];
+int q[MAX_N + 5], head = 0, tail = 0;
+//下标索引值，q存储下标
+/*
+int main() {
+    int n, k;
+    cin >> n >> k;
+    for(int i = 1; i <= n; i++) cin >> a[i];
+    for(int i = 1; i < k; i++) {//先往单调队列中放入k-1个元素
+        while(tail - head && a[q[tail - 1]] >= a[i]) tail --;//判断末尾大于等于，违反，踢了
+        q[tail++] = i;//当前入队列
+    }
+    for(int i = k; i <= n; i++) {
+        while(tail - head && a[q[tail - 1]] >= a[i]) tail --;
+        q[tail++] = i;        
+        if(q[head] <= i - k) head ++;
+        i == k || cout << " ";
+        cout << a[q[head]];
+    }
+    cout << endl;
+    head = tail = 0;
+    for(int i = 1; i < k; i++) {
+        while(tail - head && a[q[tail - 1]] <= a[i]) tail --;
+        q[tail++] = i;
+    }
+    for(int i = k; i <= n; i++) {
+        while(tail - head && a[q[tail - 1]] <= a[i]) tail --;
+        q[tail++] = i;
+        if(q[head] <= i - k) head ++;
+        i == k || cout << " ";
+        cout << a[q[head]];
+    }
+    cout << endl;
+    return 0;
+}
+*/
+
+int main() {
+    int n, k;
+    cin >> n >> k;
+    for(int i = 1; i <= n; i++) cin >> a[i];//a数组存储序列，q数组存储单调队列
+    for(int i = 1; i <= n; i++) {
+        while(tail - head && a[q[tail - 1]] >= a[i]) tail --; //维护单调性
+        q[tail++] = i;
+        if(q[head] <= i - k) head ++;//已出队列
+        if(i < k)continue;
+        i == k || cout << " ";
+        cout << a[q[head]];//头部存最小的
+    }
+    cout << endl;
+    head = tail = 0;
+    for(int i = 1; i <= n; i++) {
+        while(tail - head && a[q[tail - 1]] <= a[i]) tail --;
+        q[tail++] = i;
+        if(q[head] <= i - k) head ++;
+        if(i < k) continue;
+        i == k || cout << " ";
+        cout << a[q[head]];
+    }
+    cout << endl;
+    return 0;
+}
+```
+
+## 单调栈
+
+```cpp
+#include<iostream>
+#include<cstdio>
+#include<cmath>
+#include<cstring>
+#include<iomanip>
+#include<algorithm>
+#include<map>
+#include<vector>
+using namespace std;
+
+#define MAX_N 100000
+typedef long long inti;
+inti a[MAX_N + 5];
+inti s[MAX_N + 5], top = -1; 
+inti l[MAX_N + 5], r[MAX_N + 5];
+
+int main() {
+    inti n;
+    cin >> n;
+    for(inti i = 1; i <= n; i++) cin >> a[i];
+    a[0] =a[n + 1]= -1;
+    s[top = 0] = 0;
+    for(inti i = 1; i <= n; i++) {
+        while(a[s[top]] >= a[i]) -- top;
+        l[i] = s[top];
+        s[++top] = i;
+    }
+    s[top = 0] = n + 1;
+    for(inti i = n; i >= 1; i--) {
+        while(a[s[top]] >= a[i]) -- top;
+        r[i] = s[top];
+        s[++top] = i;
+    }
+    inti ans = 0;
+    for(inti i = 1; i <= n; i++) {
+         ans = max(ans, a[i] * (r[i] - l[i] - 1));
+    }
+    cout << ans<< endl;
+    return 0;
+}
+
+```
+
+## 0-1背包
+
+```cpp
+/*************************************************************************
+	> File Name: 47-01背包.cpp
+	> Author:fangsong
+	> Mail: 
+	> Created Time: 2020年04月22日 星期三 20时10分19秒
+ ************************************************************************/
+/*
+#include<iostream>
+#include<cstdio>
+#include<cmath>
+#include<cstring>
+#include<iomanip>
+#include<algorithm>
+#include<map>
+#include<vector>
+using namespace std;
+
+int all, n, w[105], v[105], ans[105][100005];
+
+int main() {
+    cin >> all >> n;
+    for(int i = 1; i <= n; i++) {
+        cin >>w[i] >> v[i];
+    }
+    for(int i = 1; i <= n; i++) {
+        for(int j = 1; j <= all; j++) {
+            if(j < w[i]) {
+                ans[i][j] = ans[i - 1][j];
+            } else {
+                ans[i][j] = max(ans[i - 1][j], v[i] + ans[i - 1][j - w[i]]);
+            }
+        }
+    }
+    cout << ans[n][all] << endl;
+    return 0;
+}
+*/
+#include<iostream>
+#include<cstdio>
+using namespace std;
+
+int all, n, w[102], v[102], ans[10002];
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin >> all >> n;
+    for(int i = 1; i <= n; i++) {
+        cin >>w[i] >> v[i];
+    }
+    for(int i = 1; i <= n; i++) {
+        for(int j = all; j >= w[i]; j--) {
+                ans[j] = max(ans[j], v[i] + ans[j - w[i]]);
+        }
+    }
+    cout << ans[all] << endl;
+    return 0;
+}
+```
+
+## 完全背包
+
+```cpp
+/*************************************************************************
+	> File Name: 48-完全背包.cpp
+	> Author:fangsong
+	> Mail: 
+	> Created Time: 2020年04月22日 星期三 20时53分30秒
+ ************************************************************************/
+/*
+#include<iostream>
+#include<cstdio>
+#include<cmath>
+#include<cstring>
+#include<iomanip>
+#include<algorithm>
+#include<map>
+#include<vector>
+using namespace std;
+
+int all, n, w[105], v[105], ans[105][100005];
+
+int main() {
+    cin >> n >> all;
+    for(int i = 1; i <= n; i++) {
+        cin >>w[i] >> v[i];
+    }
+    for(int i = 1; i <= n; i++) {
+        for(int j = 1; j <= all; j++) {
+            if(j < w[i]) {
+                ans[i][j] = ans[i - 1][j];
+            } else {
+                ans[i][j] = max(ans[i - 1][j], v[i] + ans[i][j - w[i]]);
+            }
+        }
+    }
+    cout << ans[n][all] << endl;
+    return 0;
+}
+*/
+
+#include<iostream>
+#include<cstdio>
+using namespace std;
+
+int all, n, w[10002], v[10002], ans[10002];
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin >> n >> all;
+    for(int i = 1; i <= n; i++) {
+        cin >>w[i] >> v[i];
+    }
+    for(int i = 1; i <= n; i++) {
+        for(int j = w[i]; j <= all; j++) {
+                ans[j] = max(ans[j], v[i] + ans[j - w[i]]);
+        }
+    }
+    cout << ans[all] << endl;
+    return 0;
+}
+
+```
+
+## 多重背包
+
+未优化:
+
+```cpp
+#include<iostream>
+#include<cstdio>
+#include<cmath>
+#include<cstring>
+#include<iomanip>
+#include<algorithm>
+#include<map>
+#include<vector>
+using namespace std;
+
+int all, n, ind ,v[100005], w[100005], ans[100000];
+int main() {
+    cin >> all >> n;
+    for(int i = 0; i < n; i++) {
+        int x, y ,z ;
+        cin >> x >> y >> z;
+        for(int j = 0; j < z; j++) {
+            ind ++;
+            w[ind] = x;
+            v[ind] = y;
+        }
+    }
+    for(int i = 1; i <= ind; i++) {
+        for(int j = all; j >= w[i]; j--) {
+            ans[j] = max(ans[j], ans[j - w[i]] + v[i]);
+        }
+    }
+    cout << ans[all] << endl;
+    return 0;
+}
+```
+
+优化:
+
+```cpp
+/*************************************************************************
+	> File Name: 49-1-多重背包.cpp
+	> Author:fangsong
+	> Mail: 
+	> Created Time: 2020年04月29日 星期三 19时59分30秒
+ ************************************************************************/
+
+#include<iostream>
+#include<cstdio>
+#include<cmath>
+#include<cstring>
+#include<iomanip>
+#include<algorithm>
+#include<map>
+#include<vector>
+using namespace std;
+
+int all, n, ind ,v[100005], w[100005], ans[100000];
+int t[20];
+int main() {
+    int tt= 1;
+    for(int i = 0; i < 20; i++) {
+        t[i] = tt;
+        tt *= 2;
+    }
+    cin >> all >> n;
+    for(int i = 0; i < n; i++) {
+        int x, y ,z , temp = 0;
+        cin >> x >> y >> z;
+        while(z > 0) {
+            ind ++;
+            if(z >= t[temp]) {
+                w[ind] = x * t[temp];
+                v[ind] = y * t[temp];
+                z-= t[temp];
+            } else {
+                w[ind] = x * z;
+                v[ind] = y * z;
+                z = 0;
+            }
+            temp ++;
+        }
+    }
+    for(int i = 1; i <= ind; i++) {
+        for(int j = all; j >= w[i]; j--) {
+            ans[j] = max(ans[j], ans[j - w[i]] + v[i]);
+        }
+    }
+    cout << ans[all] << endl;
+    return 0;
+}
+```
+
