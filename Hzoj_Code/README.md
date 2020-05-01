@@ -538,7 +538,15 @@ int main() {
 
 ```
 
-## 0-1背包
+## 背包
+
+### 0-1背包
+
+问题描述：有n件物品和容量为m的背包 给出i件物品的重量以及价值 求解让装入背包的物品重量不超过背包容量 且价值最大 。 <font color = red>特点:这是最简单的背包问题，特点是每个物品只有一件供你选择放还是不放。</font>
+
+![undefined](http://ww1.sinaimg.cn/large/006Uqzbtly1geddbcwjtrj315n0rw4c8.jpg)
+
+![undefined](http://ww1.sinaimg.cn/large/006Uqzbtly1gedddn7ua0j310j0n34gg.jpg)
 
 ```cpp
 /*************************************************************************
@@ -600,7 +608,11 @@ int main() {
 }
 ```
 
-## 完全背包
+### 完全背包
+
+问题描述：有n件物品和容量为m的背包 给出i件物品的重量以及价值 求解让装入背包的物品重量不超过背包容量 且价值最大 。 <font color = red>特点：题干看似与01一样 但它的特点是每个物品可以无限选用。</font>
+
+![undefined](http://ww1.sinaimg.cn/large/006Uqzbtly1geddg6iiwmj30q10isn1l.jpg)
 
 ```cpp
 /*************************************************************************
@@ -664,9 +676,15 @@ int main() {
 
 ```
 
-## 多重背包
+### 多重背包
+
+问题描述：有n件物品和容量为m的背包 给出i件物品的重量以及价值 还有数量 求解让装入背包的物品重量不超过背包容量 且价值最大 。
+
+<font color = red>特点 ：它与0 / 1背包有类似点 特点是每个物品都有了一定的数量。该类型题可以转化为0/1类型 .</font>
 
 未优化:
+
+![undefined](http://ww1.sinaimg.cn/large/006Uqzbtly1geddkgq89nj30v00kfwml.jpg)
 
 ```cpp
 #include<iostream>
@@ -701,6 +719,10 @@ int main() {
 }
 ```
 
+把多重背包中的数量为n的物品安二进制分解成物品转化为0/1类型。重量，单价都会改变。如下图：
+
+![undefined](http://ww1.sinaimg.cn/large/006Uqzbtly1geddlj1ajjj30v40lz123.jpg)
+
 优化:
 
 ```cpp
@@ -725,7 +747,7 @@ int all, n, ind ,v[100005], w[100005], ans[100000];
 int t[20];
 int main() {
     int tt= 1;
-    for(int i = 0; i < 20; i++) {
+    for(int i = 0; i < 20; i++) {//存二进制数据的数组
         t[i] = tt;
         tt *= 2;
     }
@@ -733,7 +755,7 @@ int main() {
     for(int i = 0; i < n; i++) {
         int x, y ,z , temp = 0;
         cin >> x >> y >> z;
-        while(z > 0) {
+        while(z > 0) {// 多重背包按二进制分解成0/1背包
             ind ++;
             if(z >= t[temp]) {
                 w[ind] = x * t[temp];
@@ -747,12 +769,130 @@ int main() {
             temp ++;
         }
     }
-    for(int i = 1; i <= ind; i++) {
+    for(int i = 1; i <= ind; i++) {//01背包
         for(int j = all; j >= w[i]; j--) {
             ans[j] = max(ans[j], ans[j - w[i]] + v[i]);
         }
     }
     cout << ans[all] << endl;
+    return 0;
+}
+```
+
+## 动态规划
+
+### 动态规划的解题步骤
+
+1、确定动归状态
+
+例如: f(i, j) 代表从底边走到(i, j) 点能获得的最大值
+
+2、确定状态转移方程
+
+例如: 
+$$
+f(i, j) = max[f(i + 1, j), f(i + 1, j + 1)] + val(i, j);
+$$
+3、正确性证明:数学归纳法
+
+#### 求解方向
+
+![image.png](http://ww1.sinaimg.cn/large/006Uqzbtly1gedem4x917j30jh05zmzc.jpg)
+
+我从哪里来:![我从哪里来](http://ww1.sinaimg.cn/large/006Uqzbtly1gedeoi41jdj30ds030aba.jpg)
+
+
+
+我到哪里去:![我到哪里去](http://ww1.sinaimg.cn/large/006Uqzbtly1gedeqrptlfj30dn07a41j.jpg)
+
+### 经典问题
+
+#### 1.[最长上升子序列](http://oj.haizeix.com/problem/44)
+
+![image.png](http://ww1.sinaimg.cn/large/006Uqzbtly1gedf1nzamcj30mn0eita1.jpg)
+
+(1)确定动归状态
+$$
+f(i)代表以i作为结尾的长度
+$$
+(2)确定状态转移方程
+
+![image.png](http://ww1.sinaimg.cn/large/006Uqzbtly1gedf636gnkj30ex0690u7.jpg)
+$$
+f(i) = max(f(j)) + 1 
+$$
+$$
+val(i) > val(j)
+$$
+
+(3)代码实现：
+
+没有优化:
+
+```cpp
+#include<iostream>
+using namespace std;
+#define max_n 1000000
+int dp[max_n + 5], a[max_n + 5];
+int main() {
+    int n, ans = 0;
+    cin >> n;
+    for(int i = 1; i <= n; i++) {
+        cin >> a[i];
+        dp[i] = 1;
+    }
+    for(int i = 1; i <= n; i++) {
+        for(int j = 1; j <= i; j++) {
+            if(a[j] >= a[i])continue;
+            dp[i] = max(dp[i], dp[j] + 1);
+        }
+        ans = max(ans, dp[i]);
+    }
+    cout << ans << endl;
+    return 0;
+}
+```
+
+这种方式效率较低，进而进行优化－－>
+
+优化：
+
+```cpp
+#include<iostream>
+#include<cstdio>
+#include<cmath>
+#include<cstring>
+#include<iomanip>
+#include<algorithm>
+#include<map>
+#include<vector>
+using namespace std;
+#define MAX_N 1000000
+int dp[MAX_N + 5];//以第ｉ位作为结尾的最长上升子序列长度
+int a[MAX_N + 5];//最长上升子序列低i位的值
+int len[MAX_N + 5], ans = 0;
+int bs(int *arr, int l, int r, int x) {
+    if(l ==  r) return l;
+    int mid = (l + r) >> 1;
+    if(arr[mid] < x) return bs(arr, mid + 1, r, x);
+    return bs(arr, l, mid, x);
+}
+int main(){
+    int n;
+    cin >> n;
+    for(int i = 1; i <= n; i++) {
+        cin >> a[i];
+        dp[i] = 1;//形成最短的１
+        len[i] = 0x3f3f3f3f;
+    }
+    len[++ans] = a[1];
+
+    for(int i = 2; i <= n; i++) {
+        dp[i] = bs(len, 1, ans + 1, a[i]);
+        len[dp[i]] = a[i];
+        ans = max(dp[i], ans);//在所有的长度中找出一个最大值
+    }
+    cout << ans << endl;
     return 0;
 }
 ```
