@@ -807,7 +807,7 @@ $$
 
 ### 经典问题
 
-#### 1.[最长上升子序列](http://oj.haizeix.com/problem/44)
+#### **1.[最长上升子序列](http://oj.haizeix.com/problem/44)**
 
 ![image.png](http://ww1.sinaimg.cn/large/006Uqzbtly1gedf1nzamcj30mn0eita1.jpg)
 
@@ -827,7 +827,7 @@ $$
 
 (3)代码实现：
 
-没有优化:
+**没有优化:**
 
 ```cpp
 #include<iostream>
@@ -855,7 +855,19 @@ int main() {
 
 这种方式效率较低，进而进行优化－－>
 
-优化：
+**优化：**
+
+1. 在i之前没有必要把所有的遍历一遍，只要在前面找到一个，长度为４例如以6 8 12 16结尾长度为4的，如果不能接到6后面，后面也不要看了，所以我们只要记录相应长度序列末尾最小值是多少![image.png](http://ww1.sinaimg.cn/large/006Uqzbtly1gedyuulbydj30g808pwfx.jpg)
+
+2. 有一个数组len[]记录的是每一种长度的序列末尾最小值
+
+   ![image.png](http://ww1.sinaimg.cn/large/006Uqzbtly1gedyy5ityhj30cr04774w.jpg)
+
+   len[]性质：一定是单调的，从小到大
+
+3. 找到最后一位小于a[i]的位置（二分查找）![image.png](http://ww1.sinaimg.cn/large/006Uqzbtly1gedz1qdurjj30h7086gn3.jpg)
+
+4. a[i]去更新替换![image-20200502120602687](README.assets/image-20200502120602687.png)
 
 ```cpp
 #include<iostream>
@@ -870,7 +882,7 @@ using namespace std;
 #define MAX_N 1000000
 int dp[MAX_N + 5];//以第ｉ位作为结尾的最长上升子序列长度
 int a[MAX_N + 5];//最长上升子序列低i位的值
-int len[MAX_N + 5], ans = 0;
+int len[MAX_N + 5], ans = 0;//记录的是每一种长度的序列末尾最小值,ans是len中记录的数量
 int bs(int *arr, int l, int r, int x) {
     if(l ==  r) return l;
     int mid = (l + r) >> 1;
@@ -885,14 +897,14 @@ int main(){
         dp[i] = 1;//形成最短的１
         len[i] = 0x3f3f3f3f;
     }
-    len[++ans] = a[1];
+    len[++ans] = a[1];//len[1] = a[1];
 
     for(int i = 2; i <= n; i++) {
-        dp[i] = bs(len, 1, ans + 1, a[i]);
-        len[dp[i]] = a[i];
+        dp[i] = bs(len, 1, ans + 1, a[i]);//len中找到第一位大于等于a[i]的值
+        len[dp[i]] = a[i];//a[i]去更新，dp[i]相应的长度
         ans = max(dp[i], ans);//在所有的长度中找出一个最大值
     }
-    cout << ans << endl;
+    cout << ans << endl;//长度种类是哪种
     return 0;
 }
 ```
