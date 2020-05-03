@@ -909,3 +909,58 @@ int main(){
 }
 ```
 
+#### 2.[最长公共子序列](http://oj.haizeix.com/problem/45)
+
+![image.png](http://ww1.sinaimg.cn/large/006Uqzbtly1gef4hqegk2j30wf0iz408.jpg)
+
+**(1)确定动归状态**
+$$
+dp[i][j]
+$$
+​         第一个字符串选前i位，第二个字符串选前j位所能形成的公共子序列长度,不一定以第ｉｊ结尾；
+
+**(2)确定状态转移方程**
+$$
+如果第i位与第j位不相等,可以看成没有第i位dp[i - 1][j], dp[i][j - 1]
+$$
+
+$$
+如果第i位与第j位相等,可以看成他俩都没dp[i - 1][j - 1] + 1, 其中1就是i,j位匹配的
+$$
+
+![image.png](http://ww1.sinaimg.cn/large/006Uqzbtly1gef4pskruuj30jp0cwafx.jpg)
+
+```cpp
+/*************************************************************************
+	> File Name: 45-最长公共子序列.cpp
+	> Author:fangsong
+	> Mail: 
+	> Created Time: 2020年04月30日 星期四 20时14分14秒
+ ************************************************************************/
+
+#include<iostream>
+#include<cstdio>
+#include<cmath>
+#include<cstring>
+#include<iomanip>
+#include<algorithm>
+#include<map>
+#include<vector>
+using namespace std;
+#define MAX_N 1000
+int dp[MAX_N +5][MAX_N +5];//第一个字符串选前i位，第二个字符串选前j位所能形成的公共子序列长度
+string s1, s2;
+int main() {
+    cin >> s1 >> s2;
+    for(int i = 1; i <= s1.size(); i++) {//字符串下表是从０开始的
+        for(int j = 1; j<= s2.size(); j++) {
+            dp[i][j] = max(dp[i - 1][j], dp[i][j - 1]);//第i位与第j位不相等
+            if(s1[i - 1] - s2[j - 1])continue;
+            dp[i][j] = dp[i - 1][j - 1] + 1;//第i位与第j位相等
+        }
+    }
+    cout << dp[s1.size()][s2.size()] << endl;
+    return 0;
+}
+```
+
