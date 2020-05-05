@@ -964,3 +964,24 @@ int main() {
 }
 ```
 
+#### 3.最长公共上升子序列
+
+![image.png](http://ww1.sinaimg.cn/large/006Uqzbtly1gehzci1p5fj30pl0itmz1.jpg)
+
+**(1)确定动归状态**
+$$
+f[i][j]表示以b[j]结尾，字符串a[i]之前的公共上升子序列的最大长度
+$$
+**(2)确定状态转移方程**
+$$
+f[i][j] >= f[i - 1][j]
+$$
+
+$$
+若a[i]!=b[j]: f[i][j] = f[i - 1][j]
+$$
+
+$$
+若a[i] == b[j]: f[i][j] = max(f[k][j]) + 1; (1 <= k <=j - 1 并且 b[j] > b[k])
+$$
+
