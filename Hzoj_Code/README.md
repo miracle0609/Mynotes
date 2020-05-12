@@ -985,3 +985,94 @@ $$
 若a[i] == b[j]: f[i][j] = max(f[k][j]) + 1; (1 <= k <=j - 1 并且 b[j] > b[k])
 $$
 
+
+
+
+
+
+
+#### #[50-扔鸡蛋](http://oj.haizeix.com/problem/50)
+
+
+
+基础做法：
+
+![image.png](http://ww1.sinaimg.cn/large/006Uqzbtly1gepv15gg8vj30u80o5k17.jpg)
+
+
+
+```cpp
+#include<iostream>
+#include<cstdio>
+#include<cmath>
+#include<cstring>
+#include<iomanip>
+#include<algorithm>
+#include<map>
+#include<vector>
+using namespace std;
+#define MAX_N 32
+#define MAX_M 65536
+long long dp[MAX_N + 5][MAX_M+ 5];
+
+int main() {
+    int n, m;
+    cin >> n >> m;
+    
+    for(int i = 1; i <= n; i++) {
+        for(int j = 1; j <= m; j++) {
+            if(i == 1) {
+                dp[i][j] = j;
+                continue;
+            }
+            dp[i][j] = j;
+            for(int k = 1; k <= j; k++){
+                dp[i][j] = min(dp[i][j], max(dp[i - 1][k], dp[i][j - k]) + 1);
+            }
+        }
+    }
+    cout << dp[n][m] - 1 << endl;
+    return 0;
+}
+```
+
+优化：n个鸡蛋扔ｋ次最多能测m层楼
+
+![image.png](http://ww1.sinaimg.cn/large/006Uqzbtly1gepwqprjysj30nq0bz0sv.jpg)
+
+```cpp
+#include<iostream>
+#include<cstdio>
+#include<cmath>
+#include<cstring>
+#include<iomanip>
+#include<algorithm>
+#include<map>
+#include<vector>
+using namespace std;
+#define MAX_N 32
+#define MAX_M 65536
+long long dp[MAX_N + 5][MAX_M+ 5];
+
+int main() {
+    long long n, m;
+    cin >> n >> m;
+    if(n == 1) {
+        cout << m << endl;
+        return 0;
+    }
+    for(long long k = 1; k <= MAX_M; k++) dp[1][k] = k;
+    for(long long i = 2; i <= n; i++) {
+        for(long long k = 1; k <= MAX_M; k++) {
+            dp[i][k] = dp[i - 1][k - 1] + dp[i][k - 1] + 1;
+        }
+    }
+    long long p = 1;
+    while(dp[n][p] < m) {
+        p++;
+    }
+    cout << p << endl;
+    return 0;
+}
+```
+
