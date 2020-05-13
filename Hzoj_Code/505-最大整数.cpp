@@ -14,6 +14,7 @@
 #include<map>
 #include<vector>
 using namespace std;
+/*
 #define MAX_N 100000
 string arr[MAX_N+2];
 
@@ -31,6 +32,24 @@ int main() {
     sort(arr, arr + n, cmp);
     for(int i = 0; i < n; i++) {
         cout << arr[i];
+    }
+    cout << endl;
+    return 0;
+}
+*/
+int n;
+string str[100005];
+bool cmp(string a, string b) {
+    return a + b > b + a;
+}
+int main() {
+    cin >> n;
+    for(int i = 0; i < n; i++) {
+        cin >> str[i];
+    }
+    sort(str, str + n, cmp);
+    for(int i = 0;i < n; i++) {
+        cout << str[i];
     }
     cout << endl;
     return 0;
