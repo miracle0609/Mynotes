@@ -2,9 +2,9 @@
 
 ## 目录：
 
-[![](https://img.shields.io/github/issues/fangsong0517/Mynotes.svg)](https://github.com/fangsong0517/Mynotes/issues)  [![](https://img.shields.io/github/forks/fangsong0517/Mynotes.svg)](https://github.com/fangsong0517/Mynotes/network) [![](https://img.shields.io/github/stars/fangsong0517/Mynotes.svg)](https://github.com/fangsong0517/Mynotes/stargazers) 
-
 [递归深搜广搜](#递归深搜广搜)
+
+[贪心](#贪心)
 
 [单调队列](#单调队列)
 
@@ -426,6 +426,52 @@ int dfs(int now) {
 #### #`529龙与虫`
 
 [题目](http://oj.haizeix.com/problem/529)
+
+## 贪心
+
+#### [#508两人过河](http://oj.haizeix.com/problem/508)
+
+![image.png](http://ww1.sinaimg.cn/large/006Uqzbtly1ger1l5v0ifj30kq0cs432.jpg)
+
+```cpp
+#include<iostream>
+#include<cstdio>
+#include<cmath>
+#include<cstring>
+#include<iomanip>
+#include<algorithm>
+#include<map>
+#include<vector>
+using namespace std;
+
+int n, num[1002], ans;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin >> n;
+    for(int i = 0; i < n; i++) {
+        cin >> num[i];
+    }
+    sort(num, num + n);
+    for(int i = n - 1; i >= 0; i-=2) {
+        if(i == 0) { //１２３直接求解,   大于等于４
+            ans += num[0];
+            break;
+        }
+        if(i == 1) {
+            ans += num[1];
+            break;
+        }
+        if(i == 2) {
+            ans += num[0] + num[1] + num[2];
+            break;
+        }
+        ans += min(num[1] + num[0] + num[i] + num[1], num[i] + num[0] + num[i - 1] + num[0]);
+    }
+    cout << ans << endl;
+    return 0;
+}
+```
 
 
 
