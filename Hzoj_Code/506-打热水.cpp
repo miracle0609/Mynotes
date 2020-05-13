@@ -12,7 +12,9 @@
 #include<algorithm>
 #include<map>
 #include<vector>
+
 using namespace std;
+/*
 #define MAX_N 35
 struct Node {
     int val;
@@ -42,6 +44,35 @@ int main() {
     }
     cout << endl;
     printf("%.2lf", sum * 1.0/ n);
+    return 0;
+}
+*/
+
+struct node {
+    int num, time;
+};
+int n;
+node s[35];
+
+bool cmp(node a, node b) {
+    return a.time < b.time;
+}
+
+int main() {
+    cin >> n;
+    for(int i = 0; i < n; i++) {
+        cin >> s[i].time;
+        s[i].num = i + 1;
+    }
+    sort(s, s + n, cmp);
+    int ans = 0, now = 0;
+    for(int i = 0; i < n; i++) {
+        i!= 0&&cout << " ";
+        cout << s[i].num;
+        ans += now;
+        now += s[i].time;
+    }
+    printf("\n%.2lf\n", (double)ans / n);
     return 0;
 }
 
