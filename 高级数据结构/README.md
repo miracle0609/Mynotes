@@ -112,3 +112,95 @@ int main() {
     return 0;
 }
 ```
+
+
+
+
+
+#　红黑树
+
+省`cpu `
+
+![image.png](http://ww1.sinaimg.cn/large/006Uqzbtly1ges2uqo6fhj30ns0d4gob.jpg)
+
+NIL值的虚拟空节点
+
+最长路径是最短路径的二倍
+
+插入：<font color = red>祖父结点看</font>
+
+删除:   <font color = red> 父节点看</font>
+
+### 插入调整情况:
+
+<font color = red>**情况一、**(插入调整就是解决两红相邻)</font>
+
+![image.png](http://ww1.sinaimg.cn/large/006Uqzbtly1ges6jnidd0j30my0b8gnr.jpg)
+
+> 　　发生冲突节点的叔叔结点，如果也是红色的，那么根节点改为红色，父节点叔叔结点改为黑色
+
+![image.png](http://ww1.sinaimg.cn/large/006Uqzbtly1ges6l7batcj30qm0bxadj.jpg)
+
+![image.png](http://ww1.sinaimg.cn/large/006Uqzbtly1ges6n7wwr1j30sb09e0vr.jpg)
+
+<font color = red>**情况二、**</font>
+
+![image.png](http://ww1.sinaimg.cn/large/006Uqzbtly1ges6x64032j30sm0dk0vp.jpg)
+
+![image.png](http://ww1.sinaimg.cn/large/006Uqzbtly1ges76rv5icj312x0g810j.jpg)
+
+图中只有17不是固定的；
+
+### 删除调整的情况
+
+
+
+
+
+<img src="http://ww1.sinaimg.cn/large/006Uqzbtly1ges84p60dlj30ek0nadhr.jpg" alt="image.png" style="zoom: 50%;" />
+
+
+
+**度为０时**
+
+![image.png](http://ww1.sinaimg.cn/large/006Uqzbtly1ges8ayl07bj30nz0e3gph.jpg)
+
+删除后相当于合成双重黑
+
+
+
+**度为１时**
+
+![image.png](http://ww1.sinaimg.cn/large/006Uqzbtly1ges8dgytshj30lx0jzgpw.jpg)
+
+<font color = red>情况一、</font>
+
+![image.png](http://ww1.sinaimg.cn/large/006Uqzbtly1ges8kafxo8j30qh0faacq.jpg)
+
+![image.png](http://ww1.sinaimg.cn/large/006Uqzbtly1ges8l7tydjj30n701q3z0.jpg)
+
+开始95是双重黑，相当于双重黑向上走一层（双重黑上扶）
+
+<font color = red>情况二、</font>
+
+
+
+![image.png](http://ww1.sinaimg.cn/large/006Uqzbtly1ges9swkdmvj30kv0fwq4g.jpg)
+
+
+
+<font color = red>情况三、</font>
+
+![image.png](http://ww1.sinaimg.cn/large/006Uqzbtly1ges8ye4mtej318p0lz7hi.jpg)
+
+遇到ＲＲ类型直接大左旋，干掉双重黑，颜色不变的黑色小帽子
+
+![image.png](http://ww1.sinaimg.cn/large/006Uqzbtly1ges92dbb86j30dv06sjsy.jpg)
+
+51变为38的颜色，38和72变成黑色
+
+
+
+
+
+![image-20200514205019635](../../../.config/Typora/typora-user-images/image-20200514205019635.png)
