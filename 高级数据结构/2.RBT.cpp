@@ -1,120 +1,9 @@
-#　红黑树
-
-省`cpu `
-
-![image.png](http://ww1.sinaimg.cn/large/006Uqzbtly1ges2uqo6fhj30ns0d4gob.jpg)
-
-NIL值的虚拟空节点
-
-最长路径是最短路径的二倍
-
-插入：<font color = red>祖父结点看</font>
-
-删除:   <font color = red> 父节点看</font>
-
-### 插入调整情况:
-
-<font color = red>**情况一、**(插入调整就是解决两红相邻)</font>
-
-![image.png](http://ww1.sinaimg.cn/large/006Uqzbtly1ges6jnidd0j30my0b8gnr.jpg)
-
-> 　　发生冲突节点的叔叔结点，如果也是红色的，那么根节点改为红色，父节点叔叔结点改为黑色
-
-![image.png](http://ww1.sinaimg.cn/large/006Uqzbtly1ges6l7batcj30qm0bxadj.jpg)
-
-![image.png](http://ww1.sinaimg.cn/large/006Uqzbtly1ges6n7wwr1j30sb09e0vr.jpg)
-
-<font color = red>**情况二、**</font>
-
-![image.png](http://ww1.sinaimg.cn/large/006Uqzbtly1ges6x64032j30sm0dk0vp.jpg)
-
-![image.png](http://ww1.sinaimg.cn/large/006Uqzbtly1ges76rv5icj312x0g810j.jpg)
-
-图中只有17不是固定的；
-
-### 删除调整的情况
-
-
-
-
-
-<img src="http://ww1.sinaimg.cn/large/006Uqzbtly1ges84p60dlj30ek0nadhr.jpg" alt="image.png" style="zoom: 50%;" />
-
-
-
-* **(1)因为兄弟结点是红色时**
-
-![image.png](http://ww1.sinaimg.cn/large/006Uqzbtly1get55wrgfij304n06474z.jpg)![image.png](http://ww1.sinaimg.cn/large/006Uqzbtly1get57a5krqj306j077abo.jpg)
-
-兄弟结点红色在左边大右旋，兄弟节点红色在右边大左旋即可
-
-
-
-
-
-* **(2)兄弟结点为黑色**
-
-
-
-主要处理双重黑
-
-度为０时
-
-![image.png](http://ww1.sinaimg.cn/large/006Uqzbtly1ges8ayl07bj30nz0e3gph.jpg)
-
-删除后相当于合成双重黑
-
-
-
-**度为１时**
-
-![image.png](http://ww1.sinaimg.cn/large/006Uqzbtly1ges8dgytshj30lx0jzgpw.jpg)
-
-<font color = red>情况一、</font>
-
-![image.png](http://ww1.sinaimg.cn/large/006Uqzbtly1ges8kafxo8j30qh0faacq.jpg)
-
-![image.png](http://ww1.sinaimg.cn/large/006Uqzbtly1ges8l7tydjj30n701q3z0.jpg)
-
-开始95是双重黑，相当于双重黑向上走一层（双重黑上扶）
-
-<font color = red>情况二、</font>
-
-这种属于ＲＬ类型的，先进行小右旋，变为ＲＲ型，然后大左旋；首先抓着72先小右旋
-
-
-
-![image.png](http://ww1.sinaimg.cn/large/006Uqzbtly1ges9swkdmvj30kv0fwq4g.jpg)
-
-![image.png](http://ww1.sinaimg.cn/large/006Uqzbtly1get4s4lf2lj30f60cmn1e.jpg)
-
-小右旋之后，48头顶本来有没有黑色，那么将51变为黑色，此时64头顶有２个黑色，又因为85和64是确定的，所以可以将72改为红色。然后变为第三种情况
-
-
-
-<font color = red>情况三、</font>
-
-![image.png](http://ww1.sinaimg.cn/large/006Uqzbtly1ges8ye4mtej318p0lz7hi.jpg)
-
-遇到ＲＲ类型直接大左旋，干掉双重黑，颜色不变的黑色小帽子
-
-* 这种属于双重黑RR型，我们直接大左旋，然后三角帽子，根变为原来根的颜色，他的两个子节点变为黑色
-
-![image.png](http://ww1.sinaimg.cn/large/006Uqzbtly1ges92dbb86j30dv06sjsy.jpg)
-
-51变为38的颜色，38和72变成黑色
-
-![image.png](http://ww1.sinaimg.cn/large/006Uqzbtly1gesc2n1fk0j30hh0jtaev.jpg)
-
-
-
-
-
-
-
-##### 代码:
-
-```cpp
+/*************************************************************************
+	> File Name: 2.RBT.cpp
+	> Author:fangsong
+	> Mail: 
+	> Created Time: 2020年05月15日 星期五 15时40分05秒
+ ************************************************************************/
 #include <stdio.h>
 #include <stdlib.h>
 #define RED 0
@@ -324,5 +213,3 @@ int main() {
     }
     return 0;
 }
-```
-
