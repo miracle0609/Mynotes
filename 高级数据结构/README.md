@@ -131,9 +131,11 @@ NIL值的虚拟空节点
 
 删除:   <font color = red> 父节点看</font>
 
-### 插入调整情况:
+### 一、插入调整情况
 
-<font color = red>**情况一、**(插入调整就是解决两红相邻)</font>
+<font color = red>(插入调整就是解决两红相邻)</font>
+
+#### <font color = red>**情况一、**</font>
 
 ![image.png](http://ww1.sinaimg.cn/large/006Uqzbtly1ges6jnidd0j30my0b8gnr.jpg)
 
@@ -143,7 +145,7 @@ NIL值的虚拟空节点
 
 ![image.png](http://ww1.sinaimg.cn/large/006Uqzbtly1ges6n7wwr1j30sb09e0vr.jpg)
 
-<font color = red>**情况二、**</font>
+#### <font color = red>**情况二、**</font>
 
 ![image.png](http://ww1.sinaimg.cn/large/006Uqzbtly1ges6x64032j30sm0dk0vp.jpg)
 
@@ -151,15 +153,27 @@ NIL值的虚拟空节点
 
 图中只有17不是固定的；
 
-### 删除调整的情况
+### 二、删除调整的情况
 
-
+<font color = red>(主要处理双重黑)</font>>
 
 
 
 <img src="http://ww1.sinaimg.cn/large/006Uqzbtly1ges84p60dlj30ek0nadhr.jpg" alt="image.png" style="zoom: 50%;" />
 
 
+
+
+
+#### **(1)兄弟结点是红色时**
+
+![image.png](http://ww1.sinaimg.cn/large/006Uqzbtly1get55wrgfij304n06474z.jpg)![image.png](http://ww1.sinaimg.cn/large/006Uqzbtly1get57a5krqj306j077abo.jpg)
+
+兄弟结点红色在左边大右旋，兄弟节点红色在右边大左旋即可
+
+
+
+#### **(2)兄弟结点为黑色**
 
 **度为０时**
 
@@ -173,7 +187,7 @@ NIL值的虚拟空节点
 
 ![image.png](http://ww1.sinaimg.cn/large/006Uqzbtly1ges8dgytshj30lx0jzgpw.jpg)
 
-<font color = red>情况一、</font>
+##### <font color = red>情况一、</font>
 
 ![image.png](http://ww1.sinaimg.cn/large/006Uqzbtly1ges8kafxo8j30qh0faacq.jpg)
 
@@ -181,15 +195,17 @@ NIL值的虚拟空节点
 
 开始95是双重黑，相当于双重黑向上走一层（双重黑上扶）
 
-<font color = red>情况二、</font>
+##### <font color = red>情况二、</font>
 
-
+这种属于ＲＬ类型的，先进行小右旋，变为ＲＲ型，然后大左旋；首先抓着72先小右旋
 
 ![image.png](http://ww1.sinaimg.cn/large/006Uqzbtly1ges9swkdmvj30kv0fwq4g.jpg)
 
+![image.png](http://ww1.sinaimg.cn/large/006Uqzbtly1get4s4lf2lj30f60cmn1e.jpg)
 
+小右旋之后，48头顶本来有没有黑色，那么将51变为黑色，此时64头顶有２个黑色，又因为85和64是确定的，所以可以将72改为红色。然后变为第三种情况
 
-<font color = red>情况三、</font>
+##### <font color = red>情况三、</font>
 
 ![image.png](http://ww1.sinaimg.cn/large/006Uqzbtly1ges8ye4mtej318p0lz7hi.jpg)
 
