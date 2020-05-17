@@ -580,6 +580,50 @@ b序列的区间和
 
 则长度大于等于什么的一段大于等于0
 
+#### [#250糖果传递](http://oj.haizeix.com/problem/250)
+<img src="http://ww1.sinaimg.cn/large/006Uqzbtly1gevpvzgj9nj30j10de0wx.jpg" alt="image.png" style="zoom:50%;" /><img src="http://ww1.sinaimg.cn/large/006Uqzbtly1gevpq4csftj30hy0e00v4.jpg" alt="image.png" style="zoom:50%;" /><img src="http://ww1.sinaimg.cn/large/006Uqzbtly1gevpr30rl0j30e505eabz.jpg" alt="image.png" style="zoom:50%;" />
+
+所以只要找到中位数
+
+```cpp
+#include<iostream>
+#include<cstdio>
+#include<cmath>
+#include<cstring>
+#include<iomanip>
+#include<algorithm>
+#include<map>
+#include<vector>
+using namespace std;
+#define MAX_N 1000000
+long long a[MAX_N + 5];
+long long s[MAX_N + 5];
+long long g[MAX_N + 5];
+long long n, sum = 0, c, ans = 0;
+int main() {
+    ios::sync_with_stdio(false);
+    cin >> n;
+    for(long long i = 1; i <= n; i++) {
+        cin >> a[i];
+        s[i] = s[i - 1] + a[i];
+        sum += a[i];
+    }
+    c = sum / n;
+    for(long long i = 1; i <= n;i++) {
+        g[i] = s[i] - i * c;
+    }
+    sort(g + 1, g + 1 + n);
+    c = g[n / 2];
+    for(long long i = 1; i <= n; i++) {
+        ans += abs(g[i] - c);
+    }
+    cout << ans << endl;
+    return 0;
+}
+```
+
+
+
 
 
 
