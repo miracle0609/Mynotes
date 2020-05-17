@@ -2,8 +2,6 @@
 笔记记录
 平常学习时的笔记整理，包括数据结构，C语言，linux学习，系统编程，计算机网络等
 
-Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc)
-
 ./
 ├── 操作系统与系统编程
 │   ├── 多进程
