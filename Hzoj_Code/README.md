@@ -8,6 +8,8 @@
 
 [枚举](#枚举)
 
+[二分](#二分)
+
 [单调队列](#单调队列)
 
 [单调栈](#单调栈)
@@ -556,9 +558,27 @@ int main() {
 }
 ```
 
+## 二分
 
+#### [#242最大平均值](http://oj.haizeix.com/problem/242)
 
+知识准备：
 
+前缀和和差分数组
+
+![image.png](http://ww1.sinaimg.cn/large/006Uqzbtly1gevic9mojtj30um0eywhr.jpg)
+
+正解: 二分答案
+
+check函数实现
+
+![image.png](http://ww1.sinaimg.cn/large/006Uqzbtly1gevioumfwkj315y0rfajj.jpg)
+
+![image.png](http://ww1.sinaimg.cn/large/006Uqzbtly1gevipwa43qj31b90h3n2g.jpg)
+
+b序列的区间和
+
+则长度大于等于什么的一段大于等于0
 
 
 

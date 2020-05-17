@@ -34,7 +34,6 @@ Node *getNewNode(int key) {
     return p;
 }
 
-
 bool has_red_child(Node *root) {
     return root->lchild->color == 0 || root->rchild->color == 0;
 }
