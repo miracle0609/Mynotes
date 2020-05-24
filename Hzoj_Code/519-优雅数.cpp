@@ -18,11 +18,11 @@ int main() {
     ios::sync_with_stdio(false);
     long long a, b, ans = 0;
     cin >> a >> b;
-    for(int i = 0; i <= 9; i++) {
-        for(int j = 0; j <= 9; j++) {
+    for(int i = 0; i <= 9; i++) {//一堆数
+        for(int j = 0; j <= 9; j++) {//一个数
             if(i == j)continue;
-            for(int k = 3; k <= 17; k++) {
-                for(int l = 1; l <= k; l++) {
+            for(int k = 3; k <= 17; k++) {//数的总长度
+                for(int l = 1; l <= k; l++) {//一个数的位置99989 -> 4
                     if(l == 1 && j == 0) continue;
                     if(l != 1 && i == 0) break;
                     long long t = 0;
@@ -41,3 +41,5 @@ int main() {
     cout << ans << endl;
     return 0;
 }
+
+
