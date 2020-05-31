@@ -107,8 +107,8 @@ void drawgame() {
         Opoint.y += Odir.y;
     }
     // Calculate ball's position
-    Opoint.x += Odir.x;
-    Opoint.y += Odir.y;
+   /* Opoint.x += Odir.x;
+    Opoint.y += Odir.y;*/
    // Boundary detection
     if(Opoint.x > X - 1) {// Right
         Opoint.x = X - 1;
