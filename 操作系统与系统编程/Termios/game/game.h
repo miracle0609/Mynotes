@@ -99,6 +99,13 @@ void initgame() {
 void drawgame() {
     // Clear old ball
     gotoxy_putc(Opoint.x, Opoint.y, ' ');
+    if(!flag) {
+        Opoint.x = Bpoint.x + 4;
+    }
+    if(flag) {
+        Opoint.x += Odir.x;
+        Opoint.y += Odir.y;
+    }
     // Calculate ball's position
     Opoint.x += Odir.x;
     Opoint.y += Odir.y;
@@ -169,4 +176,15 @@ void drawgame() {
     }
 }
 
+// Direction of movement运动方向
+// Ball is moving球在移动
+// Information Fields信息字段
+// Draw board画板
+// Clear old ball清除旧球
+// Calculate ball's position计算球的位置
+// Boundary detection边界检测
+// Draw new ball绘制新球
+// Caculate board's position计算板的位置
+// Clear direction & Boundary detection清除的方向和边界检测
+// Catch ball接球
 #endif
