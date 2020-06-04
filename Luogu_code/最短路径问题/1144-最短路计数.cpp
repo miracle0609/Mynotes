@@ -26,6 +26,7 @@ struct node {
 };
 
 edge edg[40000005];
+
 int n, m, edg_cnt, head[1000005], ans[1000005], ans_cnt[1000005];
 
 int main() {
