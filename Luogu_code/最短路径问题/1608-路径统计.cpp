@@ -1,10 +1,9 @@
 /*************************************************************************
-	> File Name: 1144-最短路计数.cpp
+	> File Name: 1608-路径统计.cpp
 	> Author:fangsong
 	> Mail: 
-	> Created Time: 2020年06月03日 星期三 20时34分22秒
+	> Created Time: 2020年06月11日 星期四 15时25分43秒
  ************************************************************************/
-
 #include <iostream>
 #include <queue>
 #include <cstring>
@@ -22,7 +21,8 @@ struct node {
 };
 
 edge edg[4000005];
-int n, m, edg_cnt, head[1000005], ans[1000005], ans_cnt[1000005];
+char mark[2001][2001];
+int n, m, edg_cnt, head[2004], ans[2005], ans_cnt[2005];
 
 int main() {
     memset(head, -1, sizeof(head));
@@ -30,18 +30,22 @@ int main() {
     memset(ans_cnt, 0, sizeof(ans_cnt));
     cin >> n >> m;
     for (int i = 0; i < m; i++) {
-        int a, b;
-        cin >> a >> b;
-        edg[edg_cnt].to = b;
-        edg[edg_cnt].val = 1;
-        edg[edg_cnt].next = head[a];
-        head[a] = edg_cnt;
-        edg_cnt++;
-        edg[edg_cnt].to = a;
-        edg[edg_cnt].val = 1;
-        edg[edg_cnt].next = head[b];
-        head[b] = edg_cnt;
-        edg_cnt++;
+        int a, b, c;
+        cin >> a >> b >> c;
+        if (mark[a][b] == 0) {
+            mark[a][b] = 1;
+            edg[edg_cnt].to = b;
+            edg[edg_cnt].val = c;
+            edg[edg_cnt].next = head[a];
+            head[a] = edg_cnt;
+            edg_cnt++;
+        } else {
+            int cnt = head[a];
+            while (edg[cnt].to != b) {
+                cnt = edg[cnt].next;
+            }
+            edg[cnt].val = min(edg[cnt].val, c);
+        }
     }
     priority_queue<node> que;
     que.push({1, 0});
@@ -60,12 +64,13 @@ int main() {
                 que.push({edg[cnt].to, ans[edg[cnt].to]});
             } else if (ans[edg[cnt].to] == temp.val + edg[cnt].val) {
                 ans_cnt[edg[cnt].to] += ans_cnt[temp.now];
-                ans_cnt[edg[cnt].to] %= 100003;
             }
         }
     }
-    for (int i = 1; i <= n; i++) {
-        cout << ans_cnt[i] << endl;
+    if (ans[n] != 0x3F3F3F3F) {
+        cout << ans[n] << " " << ans_cnt[n] << endl;
+    } else {
+        cout << "No answer" << endl;
     }
     return 0;
 }
