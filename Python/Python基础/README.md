@@ -110,3 +110,53 @@ $ sudo update-alternatives --install /usr/bin/python python /usr/bin/python2.7 2
 
 ![image.png](http://ww1.sinaimg.cn/large/006Uqzbtly1ggilkrz1hsj30m607njt2.jpg)
 
+### 保留字
+
+![image.png](http://ww1.sinaimg.cn/large/006Uqzbtly1ggio2xutbdj30qk06pq5l.jpg)
+
+### 标识符
+
+1. 不能用Pthon中的保留字
+2. 由字母，下划线，数字
+3. 区分大小写字母
+4. `__add`表示类的私有成员;
+5. `__init__()`构造函数;
+
+### 变量
+
+变量的定义与使用
+
+弱类型(动态类型语言):
+
+```python
+>>> print(a)
+123
+>>> type(a)
+<class 'int'>
+>>> a = "hello world"
+>>> print(a)
+hello world
+>>> type(a)
+<class 'str'>
+>>> id(a) #地址
+139811477572656
+>>> a = 123
+>>> id(a)
+9306048
+>>> id(123)
+9306048
+>>> id(123)
+9306048
+>>> b = 123
+>>> id(b)
+9306048
+>>> id("hello world")
+139811477572656
+>>> a = "hello world"
+>>> id(a)
+139811477572656
+>>> 
+```
+
+
+

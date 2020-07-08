@@ -13,3 +13,5 @@ for i in range(0, 101):
     sum += i
     print(sum)
 '''
+a = 123
+print("fangsong" + str(a)
