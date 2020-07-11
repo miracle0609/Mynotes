@@ -249,3 +249,225 @@ print(sum)
 - `range(1, 101, 2)`：可以用来产生1到100的奇数，其中2是步长，即每次数值递增的值。
 - `range(100, 0, -2)`：可以用来产生100到1的偶数，其中-2是步长，即每次数字递减的值。
 
+### 序列
+
+序列加法：将两种相同类型的序列加法（合并）
+
+```python
+>>> a = "hello world"
+>>> type(a)
+<class 'str'>
+>>> a = list(a)
+>>> type(a)
+<class 'list'>
+>>> print(a)
+['h', 'e', 'l', 'l', 'o', ' ', 'w', 'o', 'r', 'l', 'd']
+>>> a = tuple(a)
+>>> print(a)
+('h', 'e', 'l', 'l', 'o', ' ', 'w', 'o', 'r', 'l', 'd')
+>>> a = set(a)
+>>> print(a)
+{' ', 'l', 'w', 'r', 'e', 'h', 'd', 'o'}
+>>> 
+```
+
+
+
+#### 列表
+
+接下来我们要介绍的列表（`list`），也是一种结构化的、非标量类型，它是值的有序序列，每个值都可以通过索引进行标识，定义列表可以将列表的元素放在`[]`中，多个元素用`,`进行分隔，可以使用`for`循环对列表元素进行遍历，也可以使用`[]`或`[:]`运算符取出列表中的一个或多个元素。
+
+如何定义列表、如何遍历列表以及列表的下标运算。
+
+```python
+list1 = [1, 3, 5, 7, 100]
+print(list1) # [1, 3, 5, 7, 100]
+# 乘号表示列表元素的重复
+list2 = ['hello'] * 3
+print(list2) # ['hello', 'hello', 'hello']
+# 计算列表长度(元素个数)
+print(len(list1)) # 5
+# 下标(索引)运算
+print(list1[0]) # 1
+print(list1[4]) # 100
+# print(list1[5])  # IndexError: list index out of range
+print(list1[-1]) # 100
+print(list1[-3]) # 5
+list1[2] = 300
+print(list1) # [1, 3, 300, 7, 100]
+# 通过循环用下标遍历列表元素
+for index in range(len(list1)):
+    print(list1[index])
+# 通过for循环遍历列表元素
+for elem in list1:
+    print(elem)
+# 通过enumerate函数处理列表之后再遍历可以同时获得元素索引和值
+for index, elem in enumerate(list1):
+    print(index, elem)
+```
+
+如何向列表中添加元素以及如何从列表中移除元素。
+
+```python
+list1 = [1, 3, 5, 7, 100]
+# 添加元素
+list1.append(200)
+list1.insert(1, 400)
+# 合并两个列表
+# list1.extend([1000, 2000])
+list1 += [1000, 2000]
+print(list1) # [1, 400, 3, 5, 7, 100, 200, 1000, 2000]
+print(len(list1)) # 9
+# 先通过成员运算判断元素是否在列表中，如果存在就删除该元素
+if 3 in list1:
+	list1.remove(3)
+if 1234 in list1:
+    list1.remove(1234)
+print(list1) # [1, 400, 5, 7, 100, 200, 1000, 2000]
+# 从指定的位置删除元素
+list1.pop(0)
+list1.pop(len(list1) - 1)
+print(list1) # [400, 5, 7, 100, 200, 1000]
+# 清空列表元素
+list1.clear()
+print(list1) # []
+```
+
+和字符串一样，列表也可以做切片操作，通过切片操作我们可以实现对列表的复制或者将列表中的一部分取出来创建出新的列表，代码如下所示。
+
+```python
+fruits = ['grape', 'apple', 'strawberry', 'waxberry']
+fruits += ['pitaya', 'pear', 'mango']
+# 列表切片
+fruits2 = fruits[1:4]
+print(fruits2) # apple strawberry waxberry
+# 可以通过完整切片操作来复制列表
+fruits3 = fruits[:]
+print(fruits3) # ['grape', 'apple', 'strawberry', 'waxberry', 'pitaya', 'pear', 'mango']
+fruits4 = fruits[-3:-1]
+print(fruits4) # ['pitaya', 'pear']
+# 可以通过反向切片操作来获得倒转后的列表的拷贝
+fruits5 = fruits[::-1]
+print(fruits5) # ['mango', 'pear', 'pitaya', 'waxberry', 'strawberry', 'apple', 'grape']
+```
+
+下面的代码实现了对列表的排序操作。
+
+```python
+list1 = ['orange', 'apple', 'zoo', 'internationalization', 'blueberry']
+list2 = sorted(list1)
+# sorted函数返回列表排序后的拷贝不会修改传入的列表
+# 函数的设计就应该像sorted函数一样尽可能不产生副作用
+list3 = sorted(list1, reverse=True)
+# 通过key关键字参数指定根据字符串长度进行排序而不是默认的字母表顺序
+list4 = sorted(list1, key=len)
+print(list1)
+print(list2)
+print(list3)
+print(list4)
+# 给列表对象发出排序消息直接在列表对象上进行排序
+list1.sort(reverse=True)
+print(list1)
+```
+
+变成字典
+
+```python
+>>> for index, item in enumerate(num):
+...     print(index, item)
+... 
+0 0
+1 2
+2 4
+3 6
+4 8
+5 10
+```
+
+扩容：
+
+```python
+>>> print(num)
+[0, 2, 4, 6, 8, 10]
+>>> num.append("fangsong")
+>>> print(num)
+[0, 2, 4, 6, 8, 10, 'fangsong']
+>>> list1 = ["帅", "能力强", "高", "富"]
+>>> num.extend(list1)
+>>> print(num)
+[0, 2, 4, 6, 8, 10, 'fangsong', '帅', '能力强', '高', '富']
+>>> 
+```
+
+删除等
+
+```python
+>>> num.remove(6)
+>>> print(num)
+[2, 4, 8, 10, 'fangsong', '帅', '能力强', '高', '富']
+>>> num.remove('fangsong')
+>>> print(num)
+[2, 4, 8, 10, '帅', '能力强', '高', '富']
+>>> num.append(5)
+>>> num.append(5)
+>>> num.append(5)
+>>> num.append(5)
+>>> print(num)
+[2, 4, 8, 10, '帅', '能力强', '高', '富', 5, 5, 5, 5]
+>>> num.remove(5)
+>>> print(num)
+[2, 4, 8, 10, '帅', '能力强', '高', '富', 5, 5, 5]
+>>> num.remove(5)
+>>> num.remove(5)
+>>> print(num)
+[2, 4, 8, 10, '帅', '能力强', '高', '富', 5]
+>>> num.append(5)
+>>> num.append(5)
+>>> num.count(5)
+3
+>>> print(num)
+[2, 4, 8, 10, '帅', '能力强', '高', '富', 5, 5, 5]
+>>> 
+```
+
+随机列表:
+
+```python
+>>> import random
+>>> randnum = [random.randint(10, 100) for i in range(10)]
+>>> print(randnum)
+[15, 26, 24, 14, 80, 40, 84, 32, 16, 93]
+>>> print(randnum)
+[15, 26, 24, 14, 80, 40, 84, 32, 16, 93]
+>>> randnum = [random.randint(10, 100) for i in range(10)]
+>>> print(randnum)
+[60, 92, 89, 83, 37, 80, 43, 79, 54, 76]
+>>> 
+```
+
+列表推导式:
+
+newlist = [Expression for var in list]
+
+```python
+>>> num2 = [i for i in num if isinstance(i, int)]
+>>> print(num2)
+[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100]
+>>> 
+
+```
+
+
+
+
+
+#### 元组
+
+
+
+#### 字典
+
+
+
+#### 集合
+
