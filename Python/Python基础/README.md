@@ -273,6 +273,15 @@ print(sum)
 
 
 
+|          | 列表 | 元组 | 字典 | 集合 |
+| -------- | ---- | ---- | ---- | ---- |
+|          | []   | ()   | {}   | {}   |
+| 是否可变 | √    | ×    | √    | √    |
+| 是否重复 | √    | √    | ×    | ×    |
+| 是否有序 | √    | √    | ×    | ×    |
+
+
+
 #### 列表
 
 接下来我们要介绍的列表（`list`），也是一种结构化的、非标量类型，它是值的有序序列，每个值都可以通过索引进行标识，定义列表可以将列表的元素放在`[]`中，多个元素用`,`进行分隔，可以使用`for`循环对列表元素进行遍历，也可以使用`[]`或`[:]`运算符取出列表中的一个或多个元素。
@@ -463,11 +472,476 @@ newlist = [Expression for var in list]
 
 #### 元组
 
+比列表访问和处理速度快
 
+Python的元组与列表类似，不同之处在于元组的元素不能修改。元组使⽤⼩括号，列表使⽤⽅括号。
+
+```python
+>>> string = "hello world"
+>>> string = tuple(string)
+>>> type(string)
+<class 'tuple'>
+>>> string
+('h', 'e', 'l', 'l', 'o', ' ', 'w', 'o', 'r', 'l', 'd')
+>>> 
+```
+
+![img](https://github.com/jackfrued/Python-100-Days/raw/master/Day01-15/res/ipython-timeit.png)
+
+1. 访问元祖
+
+   ```python
+   >>> tuple=('hello', 100, 3.14)
+   >>> tuple[0]
+   'hello'
+   >>> tuple[1]
+   100
+   >>> tuple[2]
+   3.14
+   ```
+
+2. 修改元祖
+
+   ```python
+   >>> tuple[2] = 180
+   Traceback (most recent call last):
+     File "<stdin>", line 1, in <module>
+   TypeError: 'tuple' object does not support item assignment
+   >>> 
+   
+   
+   >>> p = (1, 2)
+   >>> p = (3, 4)
+   >>> p
+   (3, 4)
+   >>> p = (3, 4, 5)
+   >>> p
+   (3, 4, 5)
+   ```
+
+   说明不能修改元素
+
+3. count, index
+
+   ```python
+   >>> a = ('a', 'b', 'c', 'a', 'b')
+   >>> a.index('a', 1, 3) # 注意是左闭右开区间
+   Traceback (most recent call last):
+       File "<stdin>", line 1, in <module>
+   ValueError: tuple.index(x): x not in tuple
+   >>> a.index('a', 1, 4)
+   3
+   >>> a.count('b')
+   2
+   >>> a.count('d')
+   0
+   ```
+
+4. 比较
+
+   如果比较的元素是同类型的,则比较其值,返回结果。
+
+   如果两个元素不是同一种类型,则检查它们是否是数字。
+
+   - 如果是数字,执行必要的数字强制类型转换,然后比较。
+   - 如果有一方的元素是数字,则另一方的元素"大"(数字是"最小的")
+   - 否则,通过类型名字的字母顺序进行比较。
+
+   如果有一个列表首先到达末尾,则另一个长一点的列表"大"。
+
+   如果我们用尽了两个列表的元素而且所 有元素都是相等的,那么结果就是个平局,就是说返回一个 0。
+
+   ```python
+   #!/usr/bin/python
+   
+   tuple1, tuple2 = (123, 'xyz'), (456, 'abc')
+   
+   print cmp(tuple1, tuple2);
+   print cmp(tuple2, tuple1);
+   tuple3 = tuple2 + (786,);
+   print cmp(tuple2, tuple3)
+   tuple4 = (123, 'xyz')
+   print cmp(tuple1, tuple4)
+   ```
+
+   ```python
+   -1
+   1
+   -1
+   0
+   ```
+
+5. 长度
+
+   以下实例展示了 len()函数的使用方法：
+
+   ```python
+   #!/usr/bin/python
+   
+   tuple1, tuple2 = (123, 'xyz', 'zara'), (456, 'abc')
+   
+   print "First tuple length : ", len(tuple1);
+   print "Second tuple length : ", len(tuple2);
+   ```
+
+   以上实例输出结果如下：
+
+   ```python
+   First tuple length :  3
+   Second tuple length :  2
+   ```
+
+6. Max
+
+   以下实例展示了 max()函数的使用方法：
+
+   ```python
+   #!/usr/bin/python
+   
+   tuple1, tuple2 = (123, 'xyz', 'zara', 'abc'), (456, 700, 200)
+   
+   print "Max value element : ", max(tuple1);
+   print "Max value element : ", max(tuple2);
+   ```
+
+   以上实例输出结果如下：
+
+   ```
+   Max value element :  zara
+   Max value element :  700
+   ```
 
 #### 字典
 
+类似哈希结构
 
+字典是另一种可变容器模型，且可存储任意类型对象。
+
+字典的每个键值 **key=>value** 对用冒号 **:** 分割，每个键值对之间用逗号 **,** 分割，整个字典包括在花括号 **{}** 中 ,格式如下所示：
+
+>d = {key1 : value1, key2 : value2 }
+
+```python
+>>> num = {}
+>>> type(num)
+<class 'dict'> #类型
+```
+
+由两个list创建字典
+
+```python
+>>> list1 = list(range(10))
+>>> list1
+[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+>>> list2 = ["Marry", "shengdeng", "Zege"]
+>>> list2
+['Marry', 'shengdeng', 'Zege']
+>>> dictionary = dict(zip(list1, list2))
+>>> dictionary[0]
+'Marry'
+>>> dictionary[1]
+'shengdeng'
+>>> dictionary[2]
+'Zege'
+>>> dictionary[3]
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+KeyError: 3
+>>> 
+
+```
+
+
+
+1. 访问字典中值
+
+   ```python
+   #!/usr/bin/python
+    
+   dict = {'Name': 'Zara', 'Age': 7, 'Class': 'First'}
+    
+   print "dict['Name']: ", dict['Name']
+   print "dict['Age']: ", dict['Age']
+   ```
+
+   ```python
+   dict['Name']:  Zara
+   dict['Age']:  7
+   ```
+
+   如果用字典里没有的键访问数据，会输出错误如下：
+
+   ```python
+   #!/usr/bin/python
+    
+   dict = {'Name': 'Zara', 'Age': 7, 'Class': 'First'}
+    
+   print "dict['Alice']: ", dict['Alice']
+   ```
+
+   ```python
+   dict['Alice']: 
+   Traceback (most recent call last):
+     File "test.py", line 5, in <module>
+       print "dict['Alice']: ", dict['Alice']
+   KeyError: 'Alice'
+   ```
+
+2. 修改字典
+
+   ```python
+   #!/usr/bin/python
+    
+   dict = {'Name': 'Zara', 'Age': 7, 'Class': 'First'}
+    
+   dict['Age'] = 8 # 更新
+   dict['School'] = "RUNOOB" # 添加
+    
+    
+   print "dict['Age']: ", dict['Age']
+   print "dict['School']: ", dict['School']
+   ```
+
+   ```python
+   dict['Age']:  8
+   dict['School']:  RUNOOB
+   ```
+
+3. 删除字典元素
+
+   能删单一的元素也能清空字典，清空只需一项操作。
+
+   显示删除一个字典用del命令，如下实例：
+
+   ```python
+   #!/usr/bin/python
+   # -*- coding: UTF-8 -*-
+    
+   dict = {'Name': 'Zara', 'Age': 7, 'Class': 'First'}
+    
+   del dict['Name']  # 删除键是'Name'的条目
+   dict.clear()      # 清空字典所有条目
+   del dict          # 删除字典
+    
+   print "dict['Age']: ", dict['Age'] 
+   print "dict['School']: ", dict['School']
+   ```
+
+   但这会引发一个异常，因为用del后字典不再存在：
+
+   ```python
+   dict['Age']:
+   Traceback (most recent call last):
+     File "test.py", line 8, in <module>
+       print "dict['Age']: ", dict['Age'] 
+   TypeError: 'type' object is unsubscriptable
+   ```
+
+4. 字典键的特性
+
+   1）不允许同一个键出现两次。创建时如果同一个键被赋值两次，后一个值会被记住，如下实例：
+
+   ```python
+   #!/usr/bin/python
+    
+   dict = {'Name': 'Zara', 'Age': 7, 'Name': 'Manni'} 
+    
+   print "dict['Name']: ", dict['Name']
+   ```
+
+   ```
+   dict['Name']:  Manni
+   ```
+
+   2）键必须不可变，所以可以用数字，字符串或元组充当，所以用列表就不行，如下实例：
+
+   ```python
+   #!/usr/bin/python
+    
+   dict = {['Name']: 'Zara', 'Age': 7} 
+    
+   print "dict['Name']: ", dict['Name']
+   ```
+
+   ```
+   Traceback (most recent call last):
+     File "test.py", line 3, in <module>
+       dict = {['Name']: 'Zara', 'Age': 7} 
+   TypeError: list objects are unhashable
+   
+   
+   ```
+
+5. 内置方法
+
+| 1    | [dict.clear()](https://www.runoob.com/python/att-dictionary-clear.html) 删除字典内所有元素 |
+| ---- | ------------------------------------------------------------ |
+| 2    | [dict.copy()](https://www.runoob.com/python/att-dictionary-copy.html) 返回一个字典的浅复制 |
+| 3    | [dict.fromkeys(seq, val\)](https://www.runoob.com/python/att-dictionary-fromkeys.html) 创建一个新字典，以序列 seq 中元素做字典的键，val 为字典所有键对应的初始值 |
+| 4    | [dict.get(key, default=None)](https://www.runoob.com/python/att-dictionary-get.html) 返回指定键的值，如果值不在字典中返回default值 |
+| 5    | [dict.has_key(key)](https://www.runoob.com/python/att-dictionary-has_key.html) 如果键在字典dict里返回true，否则返回false |
+| 6    | [dict.items()](https://www.runoob.com/python/att-dictionary-items.html) 以列表返回可遍历的(键, 值) 元组数组 |
+| 7    | [dict.keys()](https://www.runoob.com/python/att-dictionary-keys.html) 以列表返回一个字典所有的键 |
+| 8    | [dict.setdefault(key, default=None)](https://www.runoob.com/python/att-dictionary-setdefault.html) 和get()类似, 但如果键不存在于字典中，将会添加键并将值设为default |
+| 9    | [dict.update(dict2)](https://www.runoob.com/python/att-dictionary-update.html) 把字典dict2的键/值对更新到dict里 |
+| 10   | [dict.values()](https://www.runoob.com/python/att-dictionary-values.html) 以列表返回字典中的所有值 |
+| 11   | [pop(key,default\])](https://www.runoob.com/python/python-att-dictionary-pop.html) 删除字典给定键 key 所对应的值，返回值为被删除的值。key值必须给出。 否则，返回default值。 |
+| 12   | [popitem()](https://www.runoob.com/python/python-att-dictionary-popitem.html) 返回并删除字典中的最后一对键和值。 |
+
+[3].  [dict.fromkeys(seq, val\)](https://www.runoob.com/python/att-dictionary-fromkeys.html) 方法
+
+```python
+#!/usr/bin/python
+# -*- coding: UTF-8 -*-
+ 
+seq = ('Google', 'Runoob', 'Taobao')
+ 
+dict = dict.fromkeys(seq)
+print "新字典为 : %s" %  str(dict)
+ 
+dict = dict.fromkeys(seq, 10)
+print "新字典为 : %s" %  str(dict)
+```
+
+```
+新字典为 : {'Google': None, 'Taobao': None, 'Runoob': None}
+新字典为 : {'Google': 10, 'Taobao': 10, 'Runoob': 10}
+```
+
+[4].[dict.get(key, default=None)](https://www.runoob.com/python/att-dictionary-get.html) 方法
+
+```python
+#!/usr/bin/python
+
+dict = {'Name': 'Runoob', 'Age': 27}
+
+print "Value : %s" %  dict.get('Age')
+print "Value : %s" %  dict.get('Sex', "Never")
+```
+
+```
+Value : 27
+Value : Never
+```
+
+[5].[dict.has_key(key)](https://www.runoob.com/python/att-dictionary-has_key.html) 方法
+
+```python
+#!/usr/bin/python
+
+dict = {'Name': 'Zara', 'Age': 7}
+
+print "Value : %s" %  dict.has_key('Age')
+print "Value : %s" %  dict.has_key('Sex')
+```
+
+```
+Value : True
+Value : False
+```
+
+[6].    [dict.items()](https://www.runoob.com/python/att-dictionary-items.html) 
+
+```python
+#!/usr/bin/python
+# coding=utf-8
+ 
+dict = {'Google': 'www.google.com', 'Runoob': 'www.runoob.com', 'taobao': 'www.taobao.com'}
+ 
+print "字典值 : %s" %  dict.items()
+ 
+# 遍历字典列表
+for key,values in  dict.items():
+    print key,values
+```
+
+```
+字典值 : [('Google', 'www.google.com'), ('taobao', 'www.taobao.com'), ('Runoob', 'www.runoob.com')]
+Google www.google.com
+taobao www.taobao.com
+Runoob www.runoob.com
+```
+
+[7].[dict.keys()](https://www.runoob.com/python/att-dictionary-keys.html)
+
+```python
+#!/usr/bin/python
+
+dict = {'Name': 'Zara', 'Age': 7}
+
+print "Value : %s" %  dict.keys()
+```
+
+```
+Value : ['Age', 'Name']
+```
 
 #### 集合
+
+自动去重
+
+```python
+
+```
+
+Python中的集合跟数学上的集合是一致的，不允许有重复元素，而且可以进行交集、并集、差集等运算。
+
+![img](https://github.com/jackfrued/Python-100-Days/raw/master/Day01-15/res/python-set.png)
+
+
+
+可以按照下面代码所示的方式来创建和使用集合。
+
+```python
+# 创建集合的字面量语法
+set1 = {1, 2, 3, 3, 3, 2}
+print(set1)
+print('Length =', len(set1))
+# 创建集合的构造器语法(面向对象部分会进行详细讲解)
+set2 = set(range(1, 10))
+set3 = set((1, 2, 3, 3, 2, 1))
+print(set2, set3)
+# 创建集合的推导式语法(推导式也可以用于推导集合)
+set4 = {num for num in range(1, 100) if num % 3 == 0 or num % 5 == 0}
+print(set4)
+```
+
+向集合添加元素和从集合删除元素。
+
+```python
+set1.add(4)
+set1.add(5)
+set2.update([11, 12])
+set2.discard(5)
+if 4 in set2:
+    set2.remove(4)
+print(set1, set2)
+print(set3.pop())
+print(set3)
+```
+
+集合的成员、交集、并集、差集等运算。
+
+```python
+# 集合的交集、并集、差集、对称差运算
+print(set1 & set2)
+# print(set1.intersection(set2))
+print(set1 | set2)
+# print(set1.union(set2))
+print(set1 - set2)
+# print(set1.difference(set2))
+print(set1 ^ set2)
+# print(set1.symmetric_difference(set2))
+# 判断子集和超集
+print(set2 <= set1)
+# print(set2.issubset(set1))
+print(set3 <= set1)
+# print(set3.issubset(set1))
+print(set1 >= set2)
+# print(set1.issuperset(set2))
+print(set1 >= set3)
+# print(set1.issuperset(set3))
+```
+
+> **说明：** Python中允许通过一些特殊的方法来为某种类型或数据结构自定义运算符（后面的章节中会讲到），上面的代码中我们对集合进行运算的时候可以调用集合对象的方法，也可以直接使用对应的运算符，例如`&`运算符跟intersection方法的作用就是一样的，但是使用运算符让代码更加直观。
 

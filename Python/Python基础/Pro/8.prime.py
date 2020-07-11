@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding=utf-8
 max_n = 200
-prime = [0 for i in range(2000)]
+prime = [0 for i in range(max_n + 1)]
 for i in range(2, max_n) :
     if prime[i] == 0:
         prime[0] += 1
