@@ -1,8 +1,6 @@
 [TOC]
 
-
-
-# Python基础
+## Python基础
 
 ### Python简介
 
@@ -946,4 +944,170 @@ print(set1 >= set3)
 ```
 
 > **说明：** Python中允许通过一些特殊的方法来为某种类型或数据结构自定义运算符（后面的章节中会讲到），上面的代码中我们对集合进行运算的时候可以调用集合对象的方法，也可以直接使用对应的运算符，例如`&`运算符跟intersection方法的作用就是一样的，但是使用运算符让代码更加直观。
+
+#### 字符串
+
+所谓**字符串**，就是由零个或多个字符组成的有限序列，一般记为[![$${\displaystyle s=a_{1}a_{2}\dots a_{n}(0\leq n \leq \infty)}$$](https://github.com/jackfrued/Python-100-Days/raw/master/Day01-15/res/formula_5.png)](https://github.com/jackfrued/Python-100-Days/blob/master/Day01-15/res/formula_5.png)。在Python程序中，如果我们把单个或多个字符用单引号或者双引号包围起来，就可以表示一个字符串。
+
+```python
+>>> string = "hello world"
+>>> len(string)
+11
+>>> string = "我的名字"
+>>> len(string)
+4
+>>> 
+```
+
+可以在字符串中使用`\`（反斜杠）来表示转义，也就是说`\`后面的字符不再是它原来的意义，例如：`\n`不是代表反斜杠和字符n，而是表示换行；而`\t`也不是代表反斜杠和字符t，而是表示制表符。所以如果想在字符串中表示`'`要写成`\'`，同理想表示`\`要写成`\\`。可以运行下面的代码看看会输出什么。
+
+```python
+>>> s1 = '\'hello, world!\''
+>>> s2 = '\n\\hello, world!\\\n'
+>>> print(s1, s2, end='')
+'hello, world!' 
+\hello, world!\
+>>> 
+```
+
+在`\`后面还可以跟一个八进制或者十六进制数来表示字符，例如`\141`和`\x61`都代表小写字母`a`，前者是八进制的表示法，后者是十六进制的表示法。也可以在`\`后面跟Unicode字符编码来表示字符，例如`\u9a86\u660a`代表的是中文“骆昊”。运行下面的代码，看看输出了什么。
+
+```python
+s1 = '\141\142\143\x61\x62\x63'
+s2 = '\u9a86\u660a'
+print(s1, s2)
+```
+
+如果不希望字符串中的`\`表示转义，我们可以通过在字符串的最前面加上字母`r`来加以说明，再看看下面的代码又会输出什么。
+
+```python
+s1 = r'\'hello, world!\''
+s2 = r'\n\\hello, world!\\\n'
+print(s1, s2, end='')
+```
+
+Python为字符串类型提供了非常丰富的运算符，我们可以使用`+`运算符来实现字符串的拼接，可以使用`*`运算符来重复一个字符串的内容，可以使用`in`和`not in`来判断一个字符串是否包含另外一个字符串（成员运算），我们也可以用`[]`和`[:]`运算符从字符串取出某个字符或某些字符（切片运算），代码如下所示。
+
+```python
+s1 = 'hello ' * 3
+print(s1) # hello hello hello 
+s2 = 'world'
+s1 += s2
+print(s1) # hello hello hello world
+print('ll' in s1) # True
+print('good' in s1) # False
+str2 = 'abc123456'
+# 从字符串中取出指定位置的字符(下标运算)
+print(str2[2]) # c
+# 字符串切片(从指定的开始索引到指定的结束索引)
+print(str2[2:5]) # c12
+print(str2[2:]) # c123456
+print(str2[2::2]) # c246
+print(str2[::2]) # ac246
+print(str2[::-1]) # 654321cba
+print(str2[-3:-1]) # 45
+```
+
+在Python中，我们还可以通过一系列的方法来完成对字符串的处理，代码如下所示。
+
+```python
+str1 = 'hello, world!'
+# 通过内置函数len计算字符串的长度
+print(len(str1)) # 13
+# 获得字符串首字母大写的拷贝
+print(str1.capitalize()) # Hello, world!
+# 获得字符串每个单词首字母大写的拷贝
+print(str1.title()) # Hello, World!
+# 获得字符串变大写后的拷贝
+print(str1.upper()) # HELLO, WORLD!
+#lower()转换为小写
+# 从字符串中查找子串所在位置
+print(str1.find('or')) # 8
+print(str1.find('shit')) # -1
+# 与find类似但找不到子串时会引发异常
+# print(str1.index('or'))
+# print(str1.index('shit'))
+# 检查字符串是否以指定的字符串开头
+print(str1.startswith('He')) # False
+print(str1.startswith('hel')) # True
+# 检查字符串是否以指定的字符串结尾
+print(str1.endswith('!')) # True
+# 将字符串以指定的宽度居中并在两侧填充指定的字符
+print(str1.center(50, '*'))
+# 将字符串以指定的宽度靠右放置左侧填充指定的字符
+print(str1.rjust(50, ' '))
+str2 = 'abc123456'
+# 检查字符串是否由数字构成
+print(str2.isdigit())  # False
+# 检查字符串是否以字母构成
+print(str2.isalpha())  # False
+# 检查字符串是否以数字和字母构成
+print(str2.isalnum())  # True
+str3 = '  jackfrued@126.com '
+print(str3)
+# 获得字符串修剪左右两侧空格之后的拷贝
+print(str3.strip())
+```
+
+分割:
+
+```python
+str.split(str="", num=string.count(str))
+```
+
+- str -- 分隔符，默认为所有的空字符，包括空格、换行(\n)、制表符(\t)等。
+- num -- 分割次数。默认为 -1, 即分隔所有。
+
+```python
+#!/usr/bin/python3
+ 
+str = "this is string example....wow!!!"
+print (str.split( ))       # 以空格为分隔符
+print (str.split('i',1))   # 以 i 为分隔符
+print (str.split('w'))     # 以 w 为分隔符
+```
+
+```
+['this', 'is', 'string', 'example....wow!!!']
+['th', 's is string example....wow!!!']
+['this is string example....', 'o', '!!!']
+```
+
+以下实例以 # 号为分隔符，指定第二个参数为 1，返回两个参数列表。
+
+```python
+#!/usr/bin/python3
+ 
+txt = "Google#Runoob#Taobao#Facebook"
+ 
+# 第二个参数为 1，返回两个参数列表
+x = txt.split("#", 1)
+ 
+print(x)
+```
+
+```python
+['Google', 'Runoob#Taobao#Facebook']
+```
+
+我们之前讲过，可以用下面的方式来格式化输出字符串。
+
+```python
+a, b = 5, 10
+print('%d * %d = %d' % (a, b, a * b))
+```
+
+当然，我们也可以用字符串提供的方法来完成字符串的格式，代码如下所示。
+
+```python
+a, b = 5, 10
+print('{0} * {1} = {2}'.format(a, b, a * b))
+```
+
+Python 3.6以后，格式化字符串还有更为简洁的书写方式，就是在字符串前加上字母`f`，我们可以使用下面的语法糖来简化上面的代码。
+
+```python
+a, b = 5, 10
+print(f'{a} * {b} = {a * b}')
+```
 
