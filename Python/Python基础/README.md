@@ -2,6 +2,8 @@
 
 ## Python基础
 
+根据[jackfrued/Python-100-Days](https://github.com/jackfrued/Python-100-Days/blob/master/)学习总结
+
 ### Python简介
 
 >Python 被称为“胶水”语言，可以同其他语言粘合着用。
@@ -1111,3 +1113,302 @@ a, b = 5, 10
 print(f'{a} * {b} = {a * b}')
 ```
 
+**字符编码**
+
+```python
+>>> string = "今天，你努力了吗？"
+>>> string
+'今天，你努力了吗？'
+>>> string.encode()
+b'\xe4\xbb\x8a\xe5\xa4\xa9\xef\xbc\x8c\xe4\xbd\xa0\xe5\x8a\xaa\xe5\x8a\x9b\xe4\xba\x86\xe5\x90\x97\xef\xbc\x9f'
+>>> bit = string.encode()
+>>> bit
+b'\xe4\xbb\x8a\xe5\xa4\xa9\xef\xbc\x8c\xe4\xbd\xa0\xe5\x8a\xaa\xe5\x8a\x9b\xe4\xba\x86\xe5\x90\x97\xef\xbc\x9f'
+>>> bit.decode()
+'今天，你努力了吗？'
+>>> str
+<class 'str'>
+>>> string
+'今天，你努力了吗？'
+>>> 
+```
+
+###　正则表达式
+
+|              |                                  |                  |                                                              |
+| ------------ | -------------------------------- | ---------------- | ------------------------------------------------------------ |
+| 符号         | 解释                             | 示例             | 说明                                                         |
+| .            | 匹配任意字符(除换行符)           | b.t              | 可以匹配bat / but / b#t / b1t等                              |
+| \w           | 匹配字母/数字/下划线/汉字        | b\wt             | 可以匹配bat / b1t / b_t等 但不能匹配b#t                      |
+| \s           | 匹配空白字符（包括\r、\n、\t等） | love\syou        | 可以匹配love you                                             |
+| \d           | 匹配数字                         | \d\d             | 可以匹配01 / 23 / 99等                                       |
+| \b           | 匹配单词的边界                   | \bThe\b          |                                                              |
+| ^            | 匹配字符串的开始                 | ^The             | 可以匹配The开头的字符串                                      |
+| $            | 匹配字符串的结束                 | .exe$            | 可以匹配.exe结尾的字符串                                     |
+| \W           | 匹配非字母/数字/下划线           | b\Wt             | 可以匹配b#t / b@t等 但不能匹配but / b1t / b_t等              |
+| \S           | 匹配非空白字符                   | love\Syou        | 可以匹配love#you等 但不能匹配love you                        |
+| \D           | 匹配非数字                       | \d\D             | 可以匹配9a / 3# / 0F等                                       |
+| \B           | 匹配非单词边界                   | \Bio\B           |                                                              |
+| []           | 匹配来自字符集的任意单一字符     | [aeiou]          | 可以匹配任一元音字母字符                                     |
+| [^]          | 匹配不在字符集中的任意单一字符   | [^aeiou]         | 可以匹配任一非元音字母字符                                   |
+| *            | 匹配0次或多次                    | \w*              |                                                              |
+| +            | 匹配1次或多次                    | \w+              |                                                              |
+| ?            | 匹配0次或1次                     | \w?              |                                                              |
+| {N}          | 匹配N次                          | \w{3}            |                                                              |
+| {M,}         | 匹配至少M次                      | \w{3,}           |                                                              |
+| {M,N}        | 匹配至少M次至多N次               | \w{3,6}          |                                                              |
+| \|           | 分支                             | foo\|bar         | 可以匹配foo或者bar                                           |
+| (?#)         | 注释                             |                  |                                                              |
+| (exp)        | 匹配exp并捕获到自动命名的组中    |                  |                                                              |
+| (?<name>exp) | 匹配exp并捕获到名为name的组中    |                  |                                                              |
+| (?:exp)      | 匹配exp但是不捕获匹配的文本      |                  |                                                              |
+| (?=exp)      | 匹配exp前面的位置                | \b\w+(?=ing)     | 可以匹配I'm dancing中的danc                                  |
+| (?<=exp)     | 匹配exp后面的位置                | (?<=\bdanc)\w+\b | 可以匹配I love dancing and reading中的第一个ing              |
+| (?!exp)      | 匹配后面不是exp的位置            |                  |                                                              |
+| (?<!exp)     | 匹配前面不是exp的位置            |                  |                                                              |
+| *?           | 重复任意次，但尽可能少重复       | a.*b a.*?b       | 将正则表达式应用于aabab，前者会匹配整个字符串aabab，后者会匹配aab和ab两个字符串 |
+| +?           | 重复1次或多次，但尽可能少重复    |                  |                                                              |
+| ??           | 重复0次或1次，但尽可能少重复     |                  |                                                              |
+| {M,N}?       | 重复M到N次，但尽可能少重复       |                  |                                                              |
+| {M,}?        | 重复M次以上，但尽可能少重复      |                  |                                                              |
+
+匹配汉字时：
+
+>[\u4e00 - \u9fa5]
+
+#### 正则表达式修饰符 - 可选标志
+
+正则表达式可以包含一些可选标志修饰符来控制匹配的模式。修饰符被指定为一个可选的标志。多个标志可以通过按位 OR(|) 它们来指定。如 re.I | re.M 被设置成 I 和 M 标志：
+
+| 修饰符 | 描述                                                         |
+| ------ | ------------------------------------------------------------ |
+| re.I   | 使匹配对大小写不敏感                                         |
+| re.L   | 做本地化识别（locale-aware）匹配                             |
+| re.M   | 多行匹配，影响 ^ 和 $                                        |
+| re.S   | 使 . 匹配包括换行在内的所有字符                              |
+| re.U   | 根据Unicode字符集解析字符。这个标志影响 \w, \W, \b, \B.      |
+| re.X   | 该标志通过给予你更灵活的格式以便你将正则表达式写得更易于理解。 |
+
+#### re.match函数
+
+re.match 尝试从字符串的起始位置匹配一个模式，如果不是起始位置匹配成功的话，match()就返回none。
+
+**函数语法**：
+
+```
+re.match(pattern, string, flags=0)
+```
+
+函数参数说明：
+
+| 参数    | 描述                                                         |
+| :------ | :----------------------------------------------------------- |
+| pattern | 匹配的正则表达式                                             |
+| string  | 要匹配的字符串。                                             |
+| flags   | 标志位，用于控制正则表达式的匹配方式，如：是否区分大小写，多行匹配等等。参见：[正则表达式修饰符 - 可选标志](https://www.runoob.com/python3/python3-reg-expressions.html#flags) |
+
+匹配成功re.match方法返回一个匹配的对象，否则返回None。
+
+我们可以使用group(num) 或 groups() 匹配对象函数来获取匹配表达式。
+
+| 匹配对象方法 | 描述                                                         |
+| :----------- | :----------------------------------------------------------- |
+| group(num=0) | 匹配的整个表达式的字符串，group() 可以一次输入多个组号，在这种情况下它将返回一个包含那些组所对应值的元组。 |
+| groups()     | 返回一个包含所有小组字符串的元组，从 1 到 所含的小组号。     |
+
+```python
+>>> import re
+>>> patter = r'mr_\w+'
+>>> string = 'MR_hello mr_nihao'
+>>> result = re.match(patter, string)
+>>> result
+>>> result = re.match(patter, string)
+>>> print(result)
+None
+>>> result = re.match(patter, string, re.I)
+>>> print(result)
+<re.Match object; span=(0, 8), match='MR_hello'>
+>>> print(result.start())
+0
+>>> print(result.end())
+8
+>>> print(result.string)
+MR_hello mr_nihao
+>>> print(result.span())
+(0, 8)
+>>> print(result.group())
+MR_hello
+>>> 
+```
+
+#### re.search方法
+
+re.search 扫描整个字符串并返回第一个成功的匹配。
+
+函数语法：
+
+```
+re.search(pattern, string, flags=0)
+```
+
+函数参数说明：
+
+| 参数    | 描述                                                         |
+| :------ | :----------------------------------------------------------- |
+| pattern | 匹配的正则表达式                                             |
+| string  | 要匹配的字符串。                                             |
+| flags   | 标志位，用于控制正则表达式的匹配方式，如：是否区分大小写，多行匹配等等。参见：[正则表达式修饰符 - 可选标志](https://www.runoob.com/python3/python3-reg-expressions.html#flags) |
+
+匹配成功re.search方法返回一个匹配的对象，否则返回None。
+
+我们可以使用group(num) 或 groups() 匹配对象函数来获取匹配表达式。
+
+| 匹配对象方法 | 描述                                                         |
+| :----------- | :----------------------------------------------------------- |
+| group(num=0) | 匹配的整个表达式的字符串，group() 可以一次输入多个组号，在这种情况下它将返回一个包含那些组所对应值的元组。 |
+| groups()     | 返回一个包含所有小组字符串的元组，从 1 到 所含的小组号。     |
+
+```python
+>>> pattern = 'mr_\\w+'
+>>> pattern
+'mr_\\w+'
+>>> string = 'MR_hello mr_nihao'
+>>> import re
+>>> result = re.search(pattern, string)
+>>> print(result)
+<re.Match object; span=(9, 17), match='mr_nihao'>
+>>> print(result.start())
+9
+>>> print(result.end())
+17
+>>> print(result.group())
+mr_nihao
+>>> print(result.string)
+MR_hello mr_nihao
+>>> result = re.search(pattern, string, re.IGNORECASE)
+>>> print(result)
+<re.Match object; span=(0, 8), match='MR_hello'>
+>>> 
+```
+
+#### findall
+
+在字符串中找到正则表达式所匹配的所有子串，并返回一个列表，如果没有找到匹配的，则返回空列表。
+
+**注意：** match 和 search 是匹配一次 findall 匹配所有。
+
+语法格式为：
+
+```
+re.findall(string[, pos[, endpos]])
+```
+
+```python
+>>> import re
+>>> string
+'MR_hello mr_nihao'
+>>> pattern
+'mr_\\w+'
+>>> result = re.findall(pattern, string)
+>>> print(result)
+['mr_nihao']
+>>> result = re.findall(pattern, string, re.I)
+>>> print(result)
+['MR_hello', 'mr_nihao']
+>>> 
+```
+
+#### re.sub()方法
+
+替换敏感文字
+
+```python
+>>> import re
+>>> pattern = r'(黑客)|(抓包)|(监听)'
+>>> string = "我是一名程序员，我想做一名黑客，我最近在研究监听套接字!"
+>>> result = re.sub(pattern, "^_^", string)
+>>> print(result)
+我是一名程序员，我想做一名^_^，我最近在研究^_^套接字!
+>>> 
+```
+
+#### re.split()方法
+
+split 方法按照能够匹配的子串将字符串分割后返回列表，它的使用形式如下：
+
+```
+re.split(pattern, string[, maxsplit=0, flags=0])
+```
+
+参数：
+
+| 参数     | 描述                                                         |
+| :------- | :----------------------------------------------------------- |
+| pattern  | 匹配的正则表达式                                             |
+| string   | 要匹配的字符串。                                             |
+| maxsplit | 分隔次数，maxsplit=1 分隔一次，默认为 0，不限制次数。        |
+| flags    | 标志位，用于控制正则表达式的匹配方式，如：是否区分大小写，多行匹配等等。参见：[正则表达式修饰符 - 可选标志](https://www.runoob.com/python3/python3-reg-expressions.html#flags) |
+
+```python
+>>> string = "@方嵩@王胜@张志国"
+>>> pattern = r"@"
+>>> name = re.split(pattern, string)
+>>> name
+['', '方嵩', '王胜', '张志国']
+```
+
+### 函数
+
+```python
+#!/usr/bin/env python
+# coding=utf-8
+
+def gcd(a, b):
+    if b == 0:
+        return a
+    else :
+        return gcd(b, a % b)
+
+a = int(input("ａ的值是多少"))
+b = int(input("ｂ的值是多少"))
+print(gcd(a, b))
+```
+
+```python
+#!/usr/bin/env python
+# coding=utf-8
+import math
+
+'''
+def circle(r):
+    result = math.pi * r * r
+    return result
+r = float(input('请输入圆的半径'))
+
+print('半径为%lf' % circle(r))
+'''
+
+r = float(input("请输入圆的半径："))
+result = lambda r : math.pi * r * r
+print('半径为%lf' % result(r))
+```
+
+###　面向对象
+
+更通俗易懂的说法，下面这段内容来自于[知乎](https://www.zhihu.com/)。
+
+![img](https://github.com/jackfrued/Python-100-Days/raw/master/Day01-15/res/oop-zhihu.png)
+
+#### 类和对象
+
+简单的说，类是对象的蓝图和模板，而对象是类的实例。
+
+当我们把一大堆拥有共同特征的对象的静态特征（属性）和动态特征（行为）都抽取出来后，就可以定义出一个叫做“类”的东西。
+
+##### 定义类
+
+![image.png](http://ww1.sinaimg.cn/large/006Uqzbtly1ggohq0wgxwj30m509tjtm.jpg)
+
+
+
+##### 创建和使用对象
