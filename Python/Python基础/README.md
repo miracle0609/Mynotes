@@ -1545,3 +1545,94 @@ file 对象使用 open 函数来创建，下表列出了 file 对象常用的函
 | `'t'`    | 文本模式（默认）                 |
 | `'+'`    | 更新（既可以读又可以写）         |
 
+
+
+
+
+### 模块
+
+```python
+#!/usr/bin/env python
+# coding=utf-8
+"""模块"""
+import os
+
+#打开文件
+path = '/home/fangsong/'
+
+dirs = os.listdir(path)
+for file in dirs:
+    print(file)
+#创建多级目录
+path = './test/git/a/b/c/d'
+#os.makedirs(path)
+#判断路径是否存在
+if os.path.exists(path) == True :
+    print(path, "is exist!")
+else :
+    dirs = os.makedirs(path)
+    print(dirs)
+```
+
+```python
+#!/usr/bin/env python
+# coding=utf-8
+"""datetime模块"""
+
+from datetime import datetime
+#获取当前时间
+now = datetime.now()
+print(now)
+
+#创建指定日期对象
+date1 = datetime(2015, 7, 16, 11, 50, 40)
+print(date1)
+
+#转为时间戳
+print(now.timestamp())
+
+#日期转字符串
+print(now.strftime('%Y-%m-%d'))
+
+#字符串转日期
+date2 = datetime.strptime('2018-10-20 10:15:40', '%Y-%m-%d %H:%M:%S')
+print(type(date2))
+print(date2)
+```
+
+```python
+#!/usr/bin/env python
+# coding=utf-8
+import random
+
+#0~1之间的随机数
+
+print(random.random())
+
+#制定范围之内的随机数
+print(random.randint(10, 100))
+
+#获取列表中的一个随机数
+list1 = [1, 2, 3, 5, 7, 11]
+print(random.choice(list1))
+```
+
+
+
+启动本地服务，在web上查看文档** https://www.cnblogs.com/kaid/p/7992240.html
+
+```python
+fangsong@fangsong-FX503VD:~/Git/Mynotes/Python/Python基础/Pro$ python -m pydoc -p 1234
+Server ready at http://localhost:1234/
+Server commands: [b]rowser, [q]uit
+server> b
+server> q
+Server stopped
+```
+
+-m 表示运行指定模块
+
+-p表示打开本地http服务
+
+
+
