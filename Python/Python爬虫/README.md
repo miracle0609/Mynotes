@@ -2,13 +2,15 @@
 
 有如下四个模块
 
-1、`urllib.requests`
+- [`urllib.request`](https://docs.python.org/zh-cn/3/library/urllib.request.html#module-urllib.request) 打开和读取 URL
 
-2、`urllib.error`  
+- [`urllib.error`](https://docs.python.org/zh-cn/3/library/urllib.error.html#module-urllib.error) 包含 [`urllib.request`](https://docs.python.org/zh-cn/3/library/urllib.request.html#module-urllib.request) 抛出的异常
 
-3、`urllib.parse`  解析和处理URL
+- [`urllib.parse`](https://docs.python.org/zh-cn/3/library/urllib.parse.html#module-urllib.parse) 用于解析 URL
 
-4、`urllib.robot parse`
+- [`urllib.robotparser`](https://docs.python.org/zh-cn/3/library/urllib.robotparser.html#module-urllib.robotparser) 用于解析 `robots.txt` 文件
+
+  
 
 ```python
 #!/usr/bin/env python
@@ -131,3 +133,59 @@ fangsong@fangsong-FX503VD:~/.myvirtualenvs$ workon Python3
 *安装requests*
 
 ![image.png](http://ww1.sinaimg.cn/large/006Uqzbtly1ggt3zxs982j30qf0fads6.jpg)
+
+![image.png](http://ww1.sinaimg.cn/large/006Uqzbtly1ggv3dgrlfrj30q00ek13j.jpg)
+
+
+
+### requests模块
+
+
+
+
+
+```python
+#!/usr/bin/env python
+# coding=utf-8
+"""使用requests发送请求和携带参数"""
+#导入模块
+import requests
+
+url = "https://www.baidu.com"
+#发送get请求
+response = requests.get("http://www.baidu.com")
+response.encoding = 'utf-8'
+print(response.text)
+
+#发送get请求,并携带参数
+r = requests.get(url, params = {'key1' : 'value1', 'key2' : 'value2'})
+r.encoding = 'utf-8'
+print(r.text)
+
+#发送post请求,并传输参数
+r = requests.post(url, data = {'key' : 'value'})
+r.encoding = 'utf-8'
+print(r.text)
+```
+
+一个简单的爬虫
+
+```python
+#!/usr/bin/env python
+# coding=utf-8
+
+import requests
+src = "https://imgsa.baidu.com/forum/wh%3D144%2C90/sign=c1e4b2dbe2cd7b89e93932823b106e9e/f66fc65c10385343ee1135309713b07ecb80888e.jpg"
+response = requests.get(src)
+with open('./data/tieba/images/1.jpg', "wb") as file:
+    file.write(response.content)
+```
+
+思路
+
+>1. 向起始URL发送请求
+>2. 从(1) 的相应中提取每个贴吧标题和对应的URL发送请求，获取响应(正则表达式)
+>3. 在(2)的响应中,提取每张图片的URL发送请求
+>4. (4)保存图片
+>5. 从(1)提取下一页中的URL
+
