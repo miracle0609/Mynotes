@@ -230,6 +230,58 @@ for i in range(begin, end + 1):
 
 第二版：
 
+1. 提取一级标题:
+
+`<a rel="noreferrer" href="/p/6793476420" title="像我科一样奋斗，随心记录" target="_blank" class="j_th_tit " clicked="true">像我科一样奋斗，随心记录</a>`
+
+`<a rel="noreferrer" href="/p/6661814756" title="渐渐的你笑了，慢慢的我哭了" target="_blank" class="j_th_tit ">渐渐的你笑了，慢慢的我哭了</a>`
+
+所以可以写出正则表达式为：
+
+```python
+pattern = re.compile(r'<a rel="noreferrer" href="(/p/\d+?)" title=".+?" target="_blank" class="j_th_tit .*?">(.+?)</a>')
+url_title = pattern.findall(content)
+```
+
+2. 提取图片:
+
+``<img class="BDE_Image" src="http://tiebapic.baidu.com/forum/w%3D580/sign=8181ff92e036afc30e0c3f6d8318eb85/685d972bd40735fa6403fceb89510fb30e2408b2.jpg" size="174406" changedsize="true" width="560" height="373" style="cursor: url(&quot;//tb2.bdstatic.com/tb/static-pb/img/cur_zin.cur&quot;), pointer;">``
+
+所以可以写出正则表达式为:
+
+```python
+content = self.parse_text(url = url)
+urls = re.findall(r'<img class="BDE_Image".*?src="(.*?)".*?', content)
+```
+
+3. 下一页
+
+`<a href="//tieba.baidu.com/f?kw=%E7%A7%91%E6%AF%94&amp;ie=utf-8&amp;pn=50" class="next pagination-item ">下一页&gt;</a>`
+
+所以可以写出正则表达式为:
+
+```python
+next_url = re.findall(r'<a href="(.*?)".*?>下一页&gt;</a>', content)
+```
+
+4. 反爬伪装
+
+`Linux:`
+
+```python
+self.header = {"User-Agent":"Mozilla/5.0 (X11;\
+                Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36"}
+```
+
+`Mac`
+
+```python
+self.header = {"User-Agent" : "Mozilla/5.0 (Macintosh;\
+                       Intel Mac OS X 10_9_2) AppleWebKit/537.75.14 (KHTML, like Gecko) Version/7.0.3 Safari/537.75.14"}
+```
+
+完整代码:
+
 ```python
 #!/usr/bin/env python
 # coding=utf-8
@@ -245,8 +297,13 @@ class TiebaSpider:
         self.kw = input('关键词：')
         self.base_url = 'https://tieba.baidu.com/f'
         self.page_num = 1
+        """
         self.header = {"User-Agent" : "Mozilla/5.0 (Macintosh;\
                        Intel Mac OS X 10_9_2) AppleWebKit/537.75.14 (KHTML, like Gecko) Version/7.0.3 Safari/537.75.14"}
+        """
+        self.header = {"User-Agent":"Mozilla/5.0 (X11;\
+                Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36"}
+
         self.title = ''
 
     def parse_text(self, url, params = None):
@@ -308,6 +365,69 @@ class TiebaSpider:
         self.page(content)
 
 if __name__ == '__main__':
+    spider = TiebaSpider()
+    spider.start()
+```
+
+**框架**
+
+```python
+#!/usr/bin/env python
+# coding=utf-8
+"""
+爬百度贴吧
+"""
+
+import requests
+import re 
+
+class TiebaSpider:
+    """贴吧爬虫"""
+    def __init__(self):
+        """初始化参数"""
+        self.kw = imput('请输入关键词:')
+        self.base_url = 'https://tieba.baidu.com/f'
+        self.page_num = 1
+        self.header = {"User-Agent":"Mozilla/5.0 (X11;\
+                Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36"}
+        self.title = ''
+
+    def parse_text(self, url, params = None):
+        """发送请求，获取相应内容"""
+
+        return #响应对象的文本信息
+    
+    def parse_byte(self, url, params=None):
+
+        return #响应对象的content
+
+    def page(self, content):
+        """解析每一页"""
+        print("第()页爬取中...".format(self.page_num))
+
+
+        #判断下一页
+        if #下一页存在:
+            self.parse_text()
+        else:
+            print('爬虫结束...爬取{}页！'.format(self.page_num))
+
+    def save_title(self):
+        """保存帖子的标题"""
+
+    def save_img(self, url):
+        """保存图片"""
+
+
+    def start(self):
+        """开始爬虫"""
+        print('爬虫开始...')
+        content = self.parse_text(url = self.base_url, params = {'kw' : self.kw. 'ie' : 'utf-8', 'fr' : 'search'})
+        self.page(content)
+
+
+
+if __name__=='__main__':
     spider = TiebaSpider()
     spider.start()
 ```
