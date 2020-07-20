@@ -432,3 +432,175 @@ if __name__=='__main__':
     spider.start()
 ```
 
+## 爬虫框架
+
+```python
+scrapy startproject chinanews_crawl
+```
+
+```python
+scrapy genspider chinanews chinanews.com
+```
+
+```python
+scrapy crawl chinanews
+```
+
+```python
+# cat items.py 
+# Define here the models for your scraped items
+#
+# See documentation in:
+# https://docs.scrapy.org/en/latest/topics/items.html
+
+from scrapy.item import Item, Field
+
+class ChinanewsCrawlItem(Item):
+    # define the fields for your item here like:
+    # name = scrapy.Field()
+    title = Field()
+    link = Field()
+    desc = Field()
+    pub_date = Field()
+```
+
+```python
+#cat chinanews.py 
+#-----------------------
+from scrapy import Spider
+from bs4 import BeautifulSoup
+from ..items import ChinanewsCrawlItem
+
+class ChinanewsSpider(Spider):
+    name = 'chinanews'
+    allowed_domains = ['chinanews.com']
+    start_urls = ('http://www.chinanews.com/rss/scroll-news.xml',)
+
+    def parse(self, response):
+        rss = BeautifulSoup(response.body, "html.parser")
+        for item in rss.find_all('item'):
+            feed_item = ChinanewsCrawlItem()
+            feed_item['title'] = item.title.text
+            feed_item['link'] = item.link.text
+            feed_item['desc'] = item.description.text
+            feed_item['pub_date'] = item.pubDate
+            yield feed_item
+```
+
+
+
+### 创建项目
+
+在开始爬取之前，您必须创建一个新的`Scrapy`项目。 进入您打算存储代码的目录中，运行下列命令:
+
+```
+scrapy startproject tutorial
+```
+
+该命令将会创建包含下列内容的 `tutorial` 目录:
+
+```
+tutorial/
+    scrapy.cfg
+    tutorial/
+        __init__.py
+        items.py
+        pipelines.py
+        settings.py
+        spiders/
+            __init__.py
+            ...
+```
+
+这些文件分别是:
+
+`scrapy.cfg`: 项目的配置文件
+
+`tutorial/`: 该项目的python模块。之后您将在此加入代码。
+
+`tutorial/items.py`: 项目中的item文件.
+
+`tutorial/pipelines.py`: 项目中的pipelines文件.
+
+`tutorial/settings.py`: 项目的设置文件.
+
+`tutorial/spiders/`: 放置spider代码的目录.
+
+### 定义Item
+
+首先根据需要从dmoz.org获取到的数据对item进行建模。 我们需要从dmoz中获取名字，url，以及网站的描述。 对此，在item中定义相应的字段。编辑 `tutorial` 目录中的 `items.py` 文件:
+
+```
+import scrapy
+
+class DmozItem(scrapy.Item):
+    title = scrapy.Field()
+    link = scrapy.Field()
+    desc = scrapy.Field()
+```
+
+一开始这看起来可能有点复杂，但是通过定义item， 您可以很方便的使用Scrapy的其他方法。而这些方法需要知道您的item的定义。
+
+### 编写第一个爬虫(Spider)
+
+Spider是用户编写用于从单个网站(或者一些网站)爬取数据的类。
+
+其包含了一个用于下载的初始URL，如何跟进网页中的链接以及如何分析页面中的内容， 提取生成 [item](https://scrapy-chs.readthedocs.io/zh_CN/0.24/topics/items.html#topics-items) 的方法。
+
+为了创建一个Spider，您必须继承 [`scrapy.Spider`](https://scrapy-chs.readthedocs.io/zh_CN/0.24/topics/spiders.html#scrapy.spider.Spider) 类， 且定义以下三个属性:
+
+- [`name`](https://scrapy-chs.readthedocs.io/zh_CN/0.24/topics/spiders.html#scrapy.spider.Spider.name): 用于区别Spider。 该名字必须是唯一的，您不可以为不同的Spider设定相同的名字。
+- [`start_urls`](https://scrapy-chs.readthedocs.io/zh_CN/0.24/topics/spiders.html#scrapy.spider.Spider.start_urls): 包含了Spider在启动时进行爬取的url列表。 因此，第一个被获取到的页面将是其中之一。 后续的URL则从初始的URL获取到的数据中提取。
+- [`parse()`](https://scrapy-chs.readthedocs.io/zh_CN/0.24/topics/spiders.html#scrapy.spider.Spider.parse) 是spider的一个方法。 被调用时，每个初始URL完成下载后生成的 [`Response`](https://scrapy-chs.readthedocs.io/zh_CN/0.24/topics/request-response.html#scrapy.http.Response) 对象将会作为唯一的参数传递给该函数。 该方法负责解析返回的数据(response data)，提取数据(生成item)以及生成需要进一步处理的URL的 [`Request`](https://scrapy-chs.readthedocs.io/zh_CN/0.24/topics/request-response.html#scrapy.http.Request) 对象。
+
+以下为我们的第一个Spider代码，保存在 `tutorial/spiders` 目录下的 `dmoz_spider.py` 文件中:
+
+```
+import scrapy
+
+class DmozSpider(scrapy.Spider):
+    name = "dmoz"
+    allowed_domains = ["dmoz.org"]
+    start_urls = [
+        "http://www.dmoz.org/Computers/Programming/Languages/Python/Books/",
+        "http://www.dmoz.org/Computers/Programming/Languages/Python/Resources/"
+    ]
+
+    def parse(self, response):
+        filename = response.url.split("/")[-2]
+        with open(filename, 'wb') as f:
+            f.write(response.body)
+```
+
+```python
+scrapy genspider chinanews chinanews.com #进行添加网址
+```
+
+### 爬取
+
+进入项目的根目录，执行下列命令启动spider:
+
+```
+scrapy crawl dmoz
+```
+
+`crawl dmoz` 启动用于爬取 `dmoz.org` 的spider，您将得到类似的输出:
+
+```
+2014-01-23 18:13:07-0400 [scrapy] INFO: Scrapy started (bot: tutorial)
+2014-01-23 18:13:07-0400 [scrapy] INFO: Optional features available: ...
+2014-01-23 18:13:07-0400 [scrapy] INFO: Overridden settings: {}
+2014-01-23 18:13:07-0400 [scrapy] INFO: Enabled extensions: ...
+2014-01-23 18:13:07-0400 [scrapy] INFO: Enabled downloader middlewares: ...
+2014-01-23 18:13:07-0400 [scrapy] INFO: Enabled spider middlewares: ...
+2014-01-23 18:13:07-0400 [scrapy] INFO: Enabled item pipelines: ...
+2014-01-23 18:13:07-0400 [dmoz] INFO: Spider opened
+2014-01-23 18:13:08-0400 [dmoz] DEBUG: Crawled (200) <GET http://www.dmoz.org/Computers/Programming/Languages/Python/Resources/> (referer: None)
+2014-01-23 18:13:09-0400 [dmoz] DEBUG: Crawled (200) <GET http://www.dmoz.org/Computers/Programming/Languages/Python/Books/> (referer: None)
+2014-01-23 18:13:09-0400 [dmoz] INFO: Closing spider (finished)
+```
+
+
+
+
+

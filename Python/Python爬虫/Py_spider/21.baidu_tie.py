@@ -70,7 +70,6 @@ class TiebaSpider:
         except:
             pass
 
-
     def start(self):
         """开始爬虫"""
         print('爬虫开始...')
