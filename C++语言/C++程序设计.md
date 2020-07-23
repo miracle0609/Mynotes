@@ -52,3 +52,141 @@ c++学习重点在于理解程序的运行流程
 
 `map排序映射[红黑树]`
 
+### set
+
+```cpp
+#include<iostream>
+#include<cstdio>
+#include<cmath>
+#include<cstring>
+#include<iomanip>
+#include<algorithm>
+#include<set>
+#include<vector>
+using namespace std;
+int main() {
+    set<int>s;
+    s.insert(345);
+    s.insert(65);
+    s.insert(9956);
+    s.insert(9000);
+    cout << s.size() << endl;
+    s.insert(65);
+    cout << s.size() << endl;
+    cout << *(s.begin()) << endl;
+    for(auto iter = s.begin(); iter != s.end(); iter++) {
+        cout << *iter << endl;
+    }
+    s.erase(s.begin());
+    cout << *(s.begin()) << endl;
+    return 0;
+}
+```
+
+```cpp
+#include<iostream>
+#include<cstdio>
+#include<cmath>
+#include<cstring>
+#include<iomanip>
+#include<algorithm>
+#include<set>
+#include<vector>
+using namespace std;
+typedef pair<string, int>PSI;
+int main() {
+    ios::sync_with_stdio(false);
+    set<PSI> s;
+    string name;
+    int n;
+    cin >> n;
+    for(int i = 0; i < n; i++) {
+        cin >> name;
+        //name = name.substr(name.find(".") + 1, name.size());
+        name.erase(0, 3);
+        s.insert(PSI(name, i));
+    }
+    for(auto iter = s.begin(); iter != s.end(); iter++) {
+        cout << iter->first << endl;
+    }
+    return 0;
+}
+```
+
+```cpp
+
+#include<iostream>
+#include<cstdio>
+#include<cmath>
+#include<cstring>
+#include<iomanip>
+#include<algorithm>
+#include<set>
+#include<vector>
+using namespace std;
+typedef pair<int, int> PII;
+int main() {
+    int n,a, sum, t = 0;
+    cin >> n;
+    set<PII>s;
+    for(int i = 0; i < n; i++) {
+        cin >> a;
+        s.insert(PII(a, t++));
+    }
+    for(int i = 0; i < n - 1; i++) {
+        int a = s.begin()->first;
+        s.erase(s.begin());
+        int b = s.begin()->first;
+        s.erase(s.begin());
+        sum += a+ b;
+        s.insert(PII(a + b, t++));
+    }
+    cout << sum << endl;
+    return 0;
+}
+```
+
+```cpp
+#include<iostream>
+#include<cstdio>
+#include<cmath>
+#include<cstring>
+#include<iomanip>
+#include<algorithm>
+#include<map>
+#include<queue>
+#include<vector>
+using namespace std;
+
+struct my_int{
+    int num;
+    bool operator< (const my_int & b) const {
+        return this->num > b.num;
+    }
+};
+
+int main() {
+    priority_queue<my_int> q;
+   // priority_queue<int, vector<int>, greater<int> > q;
+    int n, w;
+    cin >> n;
+    for(int i = 0; i < n; i++) {
+        cin >> w;
+        q.push((my_int){w});
+    }
+    int s1, s2;
+    int sum = 0;
+    for(int i = 1; i <= n - 1; i++) {
+        s1 =(int)q.top().num;
+        q.pop();
+        s2 =(int)q.top().num;
+        q.pop();
+        q.push((my_int){s1 + s2});
+        sum += s1 + s2;
+    }
+    cout << sum << endl;
+    return 0;
+}
+
+```
+
