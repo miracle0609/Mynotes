@@ -198,6 +198,118 @@ int main() {
 
 ![img](https://github.com/jackfrued/Python-100-Days/raw/master/Day01-15/res/oop-zhihu.png)
 
+### 访问权限
+
 ![image-20200725155708004](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200725155708004.png)
 
 注：友元方法
+
+学习C++重点：运行时的bug编程编译时的bug
+
+### C语言与C++中struct
+
+```cpp
+//c语言//
+//声明 
+struct stu
+{
+    ...
+};
+//定义 
+struct stu student;
+```
+
+```cpp
+//c++//
+//声明
+struct stu
+{
+    ...
+};
+//定义
+1.struct stu student;
+2.stu student;
+```
+
+```c++
+class People{
+    public:
+    int x, y;
+};
+
+struct People2{
+    int x, y;
+};
+```
+
+如果想在c语言中直接用结构体名定义变量，需要用到 typedef 
+
+```c++
+//typedef的一般用法
+typedef type new_type;
+```
+
+**特别的**当type为用户自定义类型时，type 和 new_type 可以相同。
+
+用于结构体时 
+
+```cpp
+typedef struct stu
+{
+    ...
+}Stu;
+//定义
+1.Stu student;
+2.struct stu student;
+```
+
+### 第一个class小例子
+
+```c++
+#include<iostream>
+#include<cstdio>
+#include<cmath>
+#include<cstring>
+#include<iomanip>
+#include<algorithm>
+#include<map>
+#include<vector>
+#include<set>
+using namespace std;
+
+class People{
+    friend int main();//友元#隔壁老宋
+    int x, y;
+public :
+    void set(int x);
+    void say();
+};
+
+struct People2{
+    int x, y;
+};
+
+void People::set(int x) {
+    cout << "set functiona : " << this << endl;
+    this->x = x;
+    return;
+}
+
+void People::say() {
+    cout << x << " " << y << endl;
+    return;
+}
+
+int main() {
+    People a;
+    People2 b;
+    a.y = 18432;//友元
+    cout << "a pbject : " << &a << endl;
+    a.set(3);
+    b.x = 4;
+    a.say();
+    cout << b.x << endl;
+    return 0;
+}
+```
+
