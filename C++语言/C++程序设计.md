@@ -190,3 +190,10 @@ int main() {
 
 ```
 
+## 类和对象
+
+**类型 = 类型<font color = red>数据</font> + 类型<font color = green>操作</font>**
+
+![image-20200725154924208](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200725154924208.png)
+
+![img](https://github.com/jackfrued/Python-100-Days/raw/master/Day01-15/res/oop-zhihu.png)
