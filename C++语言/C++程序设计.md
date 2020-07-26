@@ -231,6 +231,8 @@ struct stu
 2.stu student;
 ```
 
+![image-20200726205745836](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200726205745836.png)
+
 ```c++
 class People{
     public:
@@ -313,3 +315,308 @@ int main() {
 }
 ```
 
+### 构造函数与析构函数
+
+![image-20200726181013896](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200726181013896.png)
+
+
+
+```c++
+class People {
+public:
+    People(){}
+    People(string name) {//有参构造
+        this->name = name;
+    }
+    /*People() { 默认构造函数
+        arr = new int[10];
+        cout << "default constructor" << endl;
+    }*/
+    ~People() {
+        cout << "destructor" << endl;
+    }
+    string name;
+    //int *arr;
+};
+
+int main() {
+    People b("fangsong");
+    People a = string("string");
+    //a.arr[9] = 12
+    cout << a.name << endl;
+    return 0;
+}
+```
+
+**拷贝构造为什么要用&**
+
+![image-20200726185155194](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200726185155194.png)
+
+```c++
+#include <iostream>
+#include <cstdio>
+#include <cstdlib>
+#include <queue>
+#include <stack>
+#include <algorithm>
+#include <string>
+#include <map>
+#include <set>
+#include <vector>
+using namespace std;
+
+class People {
+public :
+    People() {}
+    //People() = default; //  //隐藏规则变为显示规则，易于代码维护
+   //People() = delete;
+    People(string name) {
+        cout << "param constructor" << endl;
+        this->name = name;
+    }
+    People(int x) {
+        cout << "int param constructor" << endl;
+        this->x = x;
+    }
+    People(const People &a) {
+        cout << "copy constructor" << endl;
+        this->name = a.name;
+        this->x = a.x;
+    }
+    
+    void operator=(const People &a) {
+        cout << "operator =" << endl;
+        this->name = a.name;
+        this->x = a.x;
+        return ;
+    }
+
+    ~People() {
+        cout << "destructor" << endl;
+    }
+    string name;
+    int x;
+};
+
+void incr(int &a) {
+    a += 1;
+    return ;
+}
+
+int add(People a, People b) {
+    return a.x + b.x;
+}
+
+int main() {
+    int n = 7;
+    incr(n);
+    cout << n << endl;
+    cout << add(4, 5) << endl;
+    People a("hug");
+    People b = string("hug");
+    People c(543);
+    People d = 678;
+    cout << a.name << endl;
+    cout << b.name << endl;
+    cout << c.x << endl;
+    cout << d.x << endl;
+    c = 987;
+    cout << c.x << endl;
+    d = string("duanchenyang");
+    cout << d.name << endl;
+    People e = a;
+    cout << e.name << endl;
+    cout << e.x << endl;
+    c = a;
+    cout << c.name << endl;
+    cout << c.x << endl;
+    return 0;
+}
+```
+
+### 类属性方法
+
+static
+
+![image-20200726193613579](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200726193613579.png)
+
+类属性与类方法中，类属性可以记录类对象的个数，类方法中不能访问this指针;
+
+### CONST方法
+
+![image-20200726194132004](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200726194132004.png)
+
+不去修改对象中的值
+
+const类型对象只能调用const类型方法
+
+### 类属性与const代码演示
+
+```c++
+#include <iostream>
+#include <cstdio>
+#include <cstdlib>
+#include <queue>
+#include <stack>
+#include <algorithm>
+#include <string>
+#include <map>
+#include <set>
+#include <vector>
+using namespace std;
+
+class Point {
+public :
+    Point() {
+        cout << "constructor : " << this << endl;
+        Point::total_cnt += 1;
+    }
+    Point(const Point &a) : Point() {
+        cout << "copy constructor : " << this << endl;
+        this->x = a.x;
+        this->y = a.y;
+    }
+    Point(double z) : Point() {
+        cout << "convert constructor : " << this << endl;
+        this->x = 99, this->y = 99;
+    }
+    Point(int x, int y) : Point() {
+        cout << "param constructor : " << this << endl;
+        this->x = x;
+        this->y = y;
+    }
+
+    void operator=(const Point &a) {
+        cout << "operator= : " << this << endl;
+        this->x = a.x, this->y = a.y;
+        return ;
+    }
+    void set(int x, int y) {
+        this->x = x;
+        this->y = y;
+    }
+    void seek() const {
+        seek_cnt += 1;
+        cout << x << " " << y << endl;
+    }
+
+    void s() const{
+        cout << seek_cnt << endl;
+    }
+
+    static int T() { return Point::total_cnt; }
+
+    ~Point() {
+        cout << "destructor : " << this << endl;
+        Point::total_cnt -= 1;
+    }
+
+private:
+    int x, y;
+    mutable int seek_cnt = 0;
+    static int total_cnt;
+};
+int Point::total_cnt = 0;
+
+void test() {
+    Point a;
+    cout << Point::T() << endl;
+    return ;
+}
+int main() {
+    Point a;
+    cout << a.T() << endl;
+    test();
+    Point b;
+    cout << b.T() << endl;
+    Point c(3, 4);
+    cout << c.T() << endl;
+    Point d(3.4);
+    cout << d.T() << endl;
+    c = 5.6;
+    cout << c.T() << endl;
+    cout << &a << endl;
+    cout << &b << endl;
+    cout << &c << endl;
+    cout << &d << endl;
+    d.seek();
+    c.seek();
+    const Point e(6, 7);
+    e.seek();
+    e.seek();
+    e.seek();
+    e.seek();
+    e.s();
+    return 0;
+}
+```
+
+
+
+![image-20200726202545004](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200726202545004.png)
+
+![image-20200726202933371](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200726202933371.png)
+
+对象放在栈区，类放在堆区，全局是堆区
+
+### 返回值优化
+
+![image-20200726210134448](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200726210134448.png)
+
+![image-20200726210240902](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200726210240902.png)
+
+![image-20200726210611028](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200726210611028.png)
+
+![image-20200726210710988](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200726210710988.png)
+
+![image-20200726210804996](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200726210804996.png)
+
+![image-20200726210955727](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200726210955727.png)
+
+
+
+
+
+```cpp
+#include<iostream>
+#include<cstdio>
+#include<cmath>
+#include<cstring>
+#include<iomanip>
+#include<algorithm>
+#include<map>
+#include<vector>
+#include<set>
+using namespace std;
+
+
+class People{
+public:
+    People(string name) {
+        cout << "param constructor" << endl;
+        this->name = name;
+    }
+    People(const People &a) {
+        cout << "copy constructor" << endl;
+        this->name = a.name;
+    }
+private:
+    string name;
+};
+People func() {
+    People temp_a("fangsong");
+    return temp_a;
+}
+
+
+int main() {
+    People a = func();
+    return 0;
+}
+```
+
+```cpp
+g++ -fno-elide-constructors//关闭优化
+```
+
+![image-20200726211911968](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200726211911968.png)
