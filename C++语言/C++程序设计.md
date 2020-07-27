@@ -315,6 +315,10 @@ int main() {
 }
 ```
 
+
+
+## 封装
+
 ### 构造函数与析构函数
 
 ![image-20200726181013896](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200726181013896.png)
@@ -559,6 +563,107 @@ int main() {
 
 对象放在栈区，类放在堆区，全局是堆区
 
+
+
+### 深拷贝与浅拷贝
+
+```c++
+
+#include <iostream>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <algorithm>
+#include <vector>
+#include <map>
+#include <cmath>
+#include <queue>
+using namespace std;
+
+class A {
+public :
+    A() {
+        this->arr = new int[100];
+    }
+    A(const A &obj) : x(obj.x), y(obj.y) {
+        this->arr = new int[100];
+        memcpy(this->arr, obj.arr, sizeof(int) * 100);
+    }
+    int *arr;
+    int x, y;
+};
+
+int main() {
+    A a;
+    a.x = 3, a.y = 6;
+    a.arr[0] = 123;
+    A b = a;
+    b.arr[0] = 456;
+    cout << a.arr[0] << " " << b.arr[0] << endl;
+    cout << b.x << " " << b.y << endl;
+    b.x = 6;
+    cout << a.x << " " << a.y << endl;
+    cout << b.x << " " << b.y << endl;
+    return 0;
+}
+```
+
+### 类型转换
+
+```c++
+#include<iostream>
+#include<cstdio>
+#include<cmath>
+#include<cstring>
+#include<iomanip>
+#include<algorithm>
+#include<map>
+#include<vector>
+#include<set>
+using namespace std;
+class BigInt{
+    public :
+    BigInt() {}
+    BigInt(int x) {
+        num.push_back(x);
+        process_digit();
+    }
+    friend ostream &operator<<(ostream &, const BigInt &);
+    private:
+    vector<int>num;
+    void process_digit() {
+        for(int i = 0; i < num.size(); i++) {
+            if(num[i] < 10) continue;
+            if(i + 1 == num.size())num.push_back(0);
+            num[i + 1] = num[i]/10;
+            num[i] %= 10;
+        }
+        return;
+    }
+};
+
+ostream &operator<<(ostream &out, const BigInt &a) {
+    for(int i = a.num.size() - 1; i >= 0; i--) {
+        out << a.num[i];
+    }
+    return out;
+}
+
+void func(BigInt a) {
+    cout << "func : " << a << endl;
+}
+
+int main() {
+    BigInt a;
+    a = 1234;
+    cout << a << endl;
+    func(5670);
+    return 0;
+}
+```
+
+
+
 ### 返回值优化
 
 ![image-20200726210134448](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200726210134448.png)
@@ -620,3 +725,50 @@ g++ -fno-elide-constructors//关闭优化
 ```
 
 ![image-20200726211911968](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200726211911968.png)
+
+## 继承
+
+```c++
+class Animal{
+  public :
+    string name() {retrun this->name;}
+  private:
+    string __name;
+};
+class Cat : public Animal {  
+};
+```
+
+### 继承-子类的访问权限
+
+![image-20200727122409900](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200727122409900.png)
+
+|           | public                                            | protected                                         | private                                           |
+| --------- | ------------------------------------------------- | ------------------------------------------------- | ------------------------------------------------- |
+| public    | <button style="background-color:green">√</button> | <button style="background-color:green">√</button> | <button style="background-color:green">√</button> |
+| protected | <button style="background-color:green">√</button> | <button style="background-color:green">√</button> | <button style="background-color:green">√</button> |
+| private   | <button style="background-color:red">×</button>   | <button style="background-color:red">×</button>   | <button style="background-color:red">×</button>   |
+
+### 继承-对外的访问权限
+
+|           |                public                |              protected               |             private              |
+| :-------: | :----------------------------------: | :----------------------------------: | :------------------------------: |
+|  public   |   <font color = blue>public</font>   | <font color = green>protected</font> | <font color = red>private</font> |
+| protected | <font color = green>protected</font> | <font color = green>protected</font> | <font color = red>private</font> |
+|  private  |       <font color=red>×</font>       |      <font color = red>×</font>      |    <font color = red>×</font>    |
+
+子类继承过来的对外
+
+### 继承-构造函数
+
+![image-20200727114849386](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200727114849386.png)
+
+### 菱形继承
+
+![image-20200727125950494](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200727125950494.png)
+
+所以才引出：允许一个实体类，多个接口类
+
+### 继承下的拷贝构造
+
+![image-20200727132324997](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200727132324997.png)
