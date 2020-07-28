@@ -726,6 +726,236 @@ g++ -fno-elide-constructors//关闭优化
 
 ![image-20200726211911968](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200726211911968.png)
 
+### 运算符重载
+
+![image-20200727190130791](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200727190130791.png)
+
+```c++
+#include<iostream>
+#include<cstdio>
+#include<cmath>
+#include<cstring>
+#include<iomanip>
+#include<algorithm>
+#include<map>
+#include<vector>
+#include<set>
+using namespace std;
+
+namespace haizei {
+    
+class istream{
+public :
+    istream &operator>>(int &n){
+        std::cin >> n;
+        return *this;
+    }
+private:
+
+};
+
+class ostream {
+public :
+    ostream &operator<<(int &n) {
+        std::cout << n;
+        return *this;
+    }
+    ostream &operator<<(const char *msg) {
+        std::cout<< msg;
+        return *this;
+    }
+private:
+
+};
+istream cin;
+ostream cout;
+};
+
+haizei::ostream &operator<<(haizei::ostream &out, double &z) {
+    std::cout << z;
+    return out;
+}
+
+ostream &operator+(ostream &out,const int &z){
+    out << z;
+    return out;
+}
+
+int main() {
+    int n, m;
+    haizei::cin >> n >> m;
+    haizei::cout << n <<" "<< m << "\n";
+    double k = 5.6;
+    haizei::cout << k << "\n";
+    cout + 8 + 9 + 10;
+    cout + k;
+    (((((cout + 8 )<< " ") + 9) << " ") + 10) << endl;
+    return 0;
+}
+```
+
+```c++
+#include<iostream>
+#include<cstdio>
+#include<cmath>
+#include<cstring>
+#include<iomanip>
+#include<algorithm>
+#include<map>
+#include<vector>
+#include<set>
+using namespace std;
+
+class Point{
+public:
+    Point() : __x(0), __y(0){}
+    Point(int x, int y) : __x(x), __y(y){}
+    int x() const {return __x;}
+    int y() const {return __y;}
+    Point operator+(const Point &a) {
+    /*this<---a
+     * a<----b 
+     */
+    return Point(x() + a.x(), y() + a.y());
+    }
+    Point &operator+=(const Point &a) {
+        __x += a.x();
+        __y += a.y();
+        return *this;
+    }
+    Point &operator++(){
+        __x +=1;
+        __y +=1;
+        return *this;
+    }
+    Point operator++(int) {
+        Point temp(*this);
+        __x += 1;
+        __y += 1;
+        return temp;
+    }
+private:
+    int __x, __y;
+};
+
+ostream &operator<<(ostream &out, const Point &a) {
+    cout << "Point (" << a.x() << "," <<a.y() << ")";
+    return out;
+};
+
+
+
+int main() {
+    Point a(4, 5), b(3, 4), c(1, 1);
+    cout << a << endl;
+    cout << b << endl;
+    cout << c << endl;
+    cout << a << " " << b << endl;
+    cout << a + b << endl;
+    cout << ++(c += b) << endl;
+    cout << c << endl;
+    cout << c++ << endl;
+    cout << c << endl;
+    int n = 6, m = 7;
+    (n += m) ++;
+    cout << n << endl;
+    return 0;
+}
+```
+
+
+
+```c++
+#include<iostream>
+#include<cstdio>
+#include<cmath>
+#include<cstring>
+#include<iomanip>
+#include<algorithm>
+#include<map>
+#include<vector>
+#include<set>
+using namespace std;
+
+class A{
+public:
+    A() {
+        arr = new int[10];
+    }
+    A(const A &a) : A() {
+        for(int i = 0; i < 10; i++) {
+            this->arr[i] = a.arr[i];
+        }
+        this->x = a.x;
+        this->y = a.y;
+        return;
+    }
+    int x, y;
+    int *arr;
+};
+
+class B{
+public :
+    B() : obj(nullptr) {
+        arr = new int[10];
+        arr[3] = 9973;
+    }
+    B(A *obj) : B() {
+        this->obj = obj;
+    }
+    int operator() (int a, int b) {
+        return a + b;
+    }
+    int &operator[](int ind) {
+        return arr[ind];
+    }
+    void operator[](const char *msg) {
+        cout << msg << endl;
+        return;
+    }
+    A *operator->() {
+        return obj;
+    }
+    A &operator*() {
+        return *obj;
+    }
+    ~B() {
+        delete arr;
+    }
+private:
+    int *arr;
+    A *obj;
+};
+
+ostream &operator <<(ostream &out, const A &a) {
+    out << "A（" << a.x << " ," << a.y << ")" << endl;
+    return out;
+}
+
+int main() {
+    B add;
+    cout << add(3, 4) << endl;
+    cout << add[3] << endl;
+    add[3] = 8876;
+    cout << add[3] << endl;
+    add["hello world"];
+
+    A a, b(a);
+    a.x = 67, a.y = 99;
+    B p = &a;
+    cout << p->x << " " << p->y << endl;
+    cout << *p << endl;
+    
+    a.arr[3] = 9973;
+    b.arr[3] = 6687;
+    cout << a.arr[3] << endl;
+    cout << b.arr[3] << endl;
+    return 0;
+}
+```
+
+
+
 ## 继承
 
 ```c++

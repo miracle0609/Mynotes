@@ -158,3 +158,58 @@
 
 左边是机器。右边是人画出来的
 
+
+
+
+
+## tensorflow基本概念
+
+### Tensor and Varibale
+
+![image-20200728124412119](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200728124412926.png)
+
+```python
+import tensorflow as tf
+z = tf.add(3, 4)
+print(z)
+sess = tf.Session()
+print(sess)
+result = sess.run(z)
+print(result)
+```
+
+![image-20200728124828195](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200728124828195.png)
+
+### Graph and Session
+
+#### Graph
+
+![image-20200728125043832](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200728125043832.png)
+
+#### Session
+
+![image-20200728125249011](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200728125249011.png)
+
+```python
+a = tf.constant(3)
+b = tf.constant(4)
+z = tf.add(a, b)
+print(z)
+import tensorflow as tf
+with tf.Session() as sess:
+    writer = tf.summary.FileWriter('./graphs', sess.graph)
+    print(sess)
+    result = sess.run(z)
+    print(result)
+    writer.close
+```
+
+>tensorboard --logdir=./graphs --port=8008
+
+#### TensorBoard
+
+![image-20200728131648074](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200728131648074.png)
+
+![image-20200728131630528](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200728131630528.png)
+
+![image-20200728131712094](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200728131712094.png)
