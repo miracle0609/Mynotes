@@ -319,11 +319,13 @@ int main() {
 
 ## 封装
 
+我该有的我该做的
+
 ### 构造函数与析构函数
 
 ![image-20200726181013896](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200726181013896.png)
 
-
+![image-20200728182108059](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200728182108059.png)
 
 ```c++
 class People {
@@ -728,6 +730,8 @@ g++ -fno-elide-constructors//关闭优化
 
 ### 运算符重载
 
+![image-20200728181735933](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200728181735933.png)
+
 ![image-20200727190130791](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200727190130791.png)
 
 ```c++
@@ -958,6 +962,8 @@ int main() {
 
 ## 继承
 
+叫一声爸爸，开启财富之门
+
 ```c++
 class Animal{
   public :
@@ -969,6 +975,14 @@ class Cat : public Animal {
 };
 ```
 
+类与类之间的关系，在Animal中所有的属性和方法都包含在猫类中.
+
+Cat是子类（派生类）
+
+Animal是父类（基类）
+
+
+
 ### 继承-子类的访问权限
 
 ![image-20200727122409900](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200727122409900.png)
@@ -979,7 +993,15 @@ class Cat : public Animal {
 | protected | <button style="background-color:green">√</button> | <button style="background-color:green">√</button> | <button style="background-color:green">√</button> |
 | private   | <button style="background-color:red">×</button>   | <button style="background-color:red">×</button>   | <button style="background-color:red">×</button>   |
 
+当子类无论是这哪三个，都可以访问父类中的public, 与private;
+
+它所影响的是外部对子类的访问权限-->
+
 ### 继承-对外的访问权限
+
+子类从父类继承过来的权限对外的权限;
+
+影响的外部对于子类继承父类的方法与属性的权限，这些方法与属性权限只能被压低不能被提升
 
 |           |                public                |              protected               |             private              |
 | :-------: | :----------------------------------: | :----------------------------------: | :------------------------------: |
@@ -989,9 +1011,141 @@ class Cat : public Animal {
 
 子类继承过来的对外
 
+
+
+```c++
+#include<iostream>
+#include<cstdio>
+#include<cmath>
+#include<cstring>
+#include<iomanip>
+#include<algorithm>
+#include<map>
+#include<vector>
+#include<set>
+using namespace std;
+
+class Animal {
+public :
+    Animal(){}
+    Animal(string name, int age) : __name(name), age(age) {}
+    void say() {
+        cout << "my name is " << __name  << ", my age is " << age << endl;
+    }
+
+protected:
+    string __name;
+
+
+private:
+    int age;
+};
+
+
+class Cat : public Animal{
+public :
+    Cat() = delete;
+    Cat(string name, int age) : Animal(name, age){}
+};
+
+class Bat : protected Animal{
+public: 
+    Bat() = delete;
+    Bat(string name, int age) : Animal(name, age){}
+    void say() {
+        this->Animal::say();
+        cout << "class Bat : " << __name << endl;
+        //cout << "class age : " << age <<endl; 不能访问
+    }
+};
+
+int main() {
+    Cat a("kitty", 29);
+    a.say();
+    Bat b("fsong", 16384);
+    b.say();//不能直接访问say();
+    return 0;
+}
+```
+
+
+
 ### 继承-构造函数
 
 ![image-20200727114849386](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200727114849386.png)
+
+
+
+调用基类的构造函数->调用成员对象的构造函数->调用自身的构造函数。
+
+```cpp
+#include<iostream>
+#include<cstdio>
+#include<cmath>
+#include<cstring>
+#include<iomanip>
+#include<algorithm>
+#include<map>
+#include<vector>
+#include<set>
+using namespace std;
+
+
+class D {
+public :
+    D() {cout << "D constructor" << endl;}
+    ~D() {
+        cout << "D destructor" << endl;
+    }
+};
+
+class A {
+public :
+    A() = delete;
+    A(int x, int y) {cout << "A constructor" << endl;}
+    ~A() {
+        cout << "A destructor" << endl;
+    }
+};
+
+class B {
+    public :
+    B() {cout << "B constructor" << endl;}
+    ~B() {
+        cout << "B destructor" << endl;
+    }
+    
+};
+
+class C : public D{
+public :
+    C() : a(3, 4) {cout << "C constructor" << endl;}
+    ~C() {
+        cout << "C destructor" << endl;
+    }
+private:
+    B b; 
+    A a;
+};
+
+int main() {
+    C c;
+    return 0;
+}
+```
+
+```c++
+D constructor
+B constructor
+A constructor
+C constructor
+C destructor
+A destructor
+B destructor
+D destructor
+```
+
+
 
 ### 菱形继承
 
@@ -1002,3 +1156,6 @@ class Cat : public Animal {
 ### 继承下的拷贝构造
 
 ![image-20200727132324997](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200727132324997.png)
+
+
+
