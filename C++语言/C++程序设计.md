@@ -442,7 +442,9 @@ int main() {
 
 ### 类属性方法
 
-static
+static   类成员，类方法
+
+类的成员与方法
 
 ![image-20200726193613579](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200726193613579.png)
 
@@ -455,6 +457,8 @@ static
 不去修改对象中的值
 
 const类型对象只能调用const类型方法
+
+修饰后只能类const访问
 
 ### 类属性与const代码演示
 
@@ -510,7 +514,7 @@ public :
         cout << seek_cnt << endl;
     }
 
-    static int T() { return Point::total_cnt; }
+    static int T() { return Point::total_cnt; }//类承成员方法
 
     ~Point() {
         cout << "destructor : " << this << endl;
@@ -520,7 +524,7 @@ public :
 private:
     int x, y;
     mutable int seek_cnt = 0;
-    static int total_cnt;
+    static int total_cnt;//类方法成员属性
 };
 int Point::total_cnt = 0;
 
@@ -1156,6 +1160,114 @@ D destructor
 ### 继承下的拷贝构造
 
 ![image-20200727132324997](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200727132324997.png)
+
+
+
+```c++
+#include<iostream>
+#include<cstdio>
+#include<cmath>
+#include<cstring>
+#include<iomanip>
+#include<algorithm>
+#include<map>
+#include<vector>
+#include<set>
+using namespace std;
+
+
+class A {
+public :
+    A() {
+        cout << "class A constuctor" << endl;
+        this->x = 0x01020304;
+    }
+    A(const A &a) {
+        cout << "class A copy constuctor : "<< this << endl;
+    }
+    int x;
+};
+
+
+class B : public A {
+    /*头部存储父类相关的信息;
+    * */
+public :
+    B() {
+        this->y = 0x05060708;
+        cout << "class B constuctor" << endl;
+    }
+    B(const B &b) : A(b) {
+        cout <<  "class B copy constuctor : " << this << endl;
+    }
+    int y;
+};
+
+int main() {
+    B b1;
+    B b2(b1);
+    const char *msg = (const char *)(&b1);
+    for(int i = 0; i < sizeof(B); i++) {
+        printf("%X", msg[i]);
+    }
+    
+    return 0;
+}
+```
+
+
+
+## 多态
+
+### 虚函数
+
+虚函数是实现多态的最关键的手段
+
+![image-20200730101858970](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200730101858970.png)
+
+![image-20200730101843373](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200730101843373.png)
+
+有虚函数时，就是调用的相关对象方法；c->run()调用的是Cat中的run方法了；
+
+虚函数是跟着对象走的;如果有是个对象run，那么就会不知道是调用的哪个;
+
+### 纯虚函数
+
+![image-20200730103658301](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200730103658301.png)
+
+纯虚函数类似接口；子类中必须得实现的方法;
+
+![image-20200730110330489](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200730110330489.png)
+
+### 虚函数与纯虚函数区别
+
+虚函数声明后，子类可以不写此方法
+
+纯虚函数声明后，子类必须写此方法
+
+### 抽象类-{接口类}
+
+抽象类不可能产生对象的类
+
+![image-20200730104022429](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200730104022429.png)
+
+
+
+![image-20200730105952288](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200730105952288.png)
+
+![image-20200730110037077](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200730110037077.png)
+
+
+
+### VIRTUAL关键字
+
+![image-20200730110217384](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200730110217384.png)
+
+因为类方法只能跟着类走;
+
+override更加明确的告诉编译器覆盖父亲类的虚函数;起到报错作用.
+
+### 虚继承&final关键字
 
 
 
