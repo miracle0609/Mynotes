@@ -1357,6 +1357,12 @@ int main() {
 
 ## 多态
 
+![image-20200801205542749](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200801205542749.png)
+
+普通的成员跟着类走
+
+虚函数跟着对象走
+
 ### 虚函数
 
 虚函数是实现多态的最关键的手段
@@ -1387,6 +1393,10 @@ int main() {
 
 抽象类不可能产生对象的类
 
+抽象类也叫纯虚函数
+
+![image-20200801184440129](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200801184440129.png)
+
 ![image-20200730104022429](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200730104022429.png)
 
 
@@ -1405,6 +1415,140 @@ int main() {
 
 override更加明确的告诉编译器覆盖父亲类的虚函数;起到报错作用.
 
+
+
+父类中析构函数必须加virtual
+
+```c++
+#include<iostream>
+#include<cstdio>
+#include<cmath>
+#include<cstring>
+#include<iomanip>
+#include<algorithm>
+#include<map>
+#include<vector>
+#include<set>
+using namespace std;
+
+class Animal{
+public: 
+    virtual void run() {
+        cout << "I don't hnow how to run" << endl;
+    }
+};
+
+class Cat : public Animal {
+public :
+    void run() override {
+        cout << "I can run with four legs" << endl;
+    }
+};
+
+class Dog : public Animal {
+public :
+    void run() override {
+        cout << "I can run with four legs,yao~ yao~ yao~" << endl;
+    }
+};
+
+class Bat : public Animal {
+public :
+    void run() override {
+        cout << "I can fly" << endl;
+    }
+};
+
+
+class A {
+public :
+    A() = default;
+    A(string s) {
+        cout << "param constructor" << endl;
+    }
+    A(const A &a) {
+        cout << "copy constructor" << endl;
+    }
+    int x;
+    virtual void say(int x) {
+        cout << this << endl;
+        cout << "class A : I can say, x = "<< x <<endl;
+    }
+};
+
+typedef void (*func)(void *, int);
+
+A retA() {
+    A temp_a("hello world");
+    return temp_a;
+}
+
+
+class Base{
+    public :
+    Base() {
+        cout << "Base constructor" << endl;
+        this->x = new int;
+    }
+    virtual ~Base() {//父类中析构函数必须加virtual
+        cout << "Base destructor" << endl;
+        delete[] this->x;
+    }
+    private:
+    int *x;
+};
+
+class Base_A : public Base {
+    public :
+    Base_A() {
+        cout << "Base_A constructor" << endl;
+        this->y = new int;
+    }
+    ~Base_A() {
+        cout << "Base_A destructor" << endl;
+        delete this->y;
+    }
+    private:
+    int *y;
+};
+
+int main() {
+    Base *ba = new Base_A();
+    delete ba;
+
+
+
+    cout << sizeof(A) << endl;
+    A temp_a, temp_b;
+    temp_a.x = 9973;
+    temp_b.x = 10000;
+    temp_a.say(67);
+    A temp_c = retA();
+    ((func **)(&temp_a))[0][0](&temp_b, 6);
+    srand(time(0));
+    Cat a;
+    Animal &b = a;
+    Animal *c[10];
+    cout << sizeof(Cat) << endl;
+
+    for(int i = 0; i < 10; i++) {
+        int op = rand() % 3;
+        switch(op) {
+            case 0:c[i] = new Cat();break;
+            case 1:c[i] = new Dog();break;
+            case 2:c[i] = new Bat();break;
+        }
+    }
+    for(int i = 0; i < 10; i++) {
+        c[i]->run();
+    }
+    return 0;
+}
+
+```
+
+
+
 ### 虚继承&final关键字
 
 
@@ -1413,7 +1557,216 @@ override更加明确的告诉编译器覆盖父亲类的虚函数;起到报错�
 
 ![image-20200730153051831](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200730153051831.png)
 
+![image-20200801165115045](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200801165115045.png)
+
+![image-20200801202134605](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200801202134605.png)
+
+每个类对应着一张虚函数表
 
 
 
+
+
+
+
+C++中一个类是公用一张虚函数表的，基类有基类的虚函数表，子类是子类的虚函数表，这极大的节省了内存
+
+![image-20200801170308244](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200801170308244.png)
+
+say前面有一个隐藏的this指针
+
+
+
+### 实现哈希表
+
+```c++
+#include <iostream>
+#include <cstdio>
+#include <cstdlib>
+#include <queue>
+#include <stack>
+#include <algorithm>
+#include <string>
+#include <map>
+#include <set>
+#include <vector>
+using namespace std;
+
+namespace haizei {//海贼
+
+class IHashFunc {//自定义的哈希Func,用于继承
+public :
+    virtual int operator()(int) = 0;
+};
+
+class HashTable {
+    typedef int (*HashFunc_T)(int);//对应函数
+    typedef pair<int, int> PII;
+public :
+    HashTable(HashFunc_T);
+    HashTable(IHashFunc &);
+    int &operator[](int);
+
+private:
+    HashTable(HashFunc_T, IHashFunc *, int);
+    int hash_type;//是1还是2
+    HashFunc_T func1;//int 
+    IHashFunc *func2;//虚函数的继承
+
+    int __size;//长度大小
+    PII **data;//存的值
+};
+
+HashTable::HashTable(HashFunc_T func1, IHashFunc *func2, int hash_type) 
+: func1(func1), func2(func2), hash_type(hash_type) {//初始化哈希表
+    this->__size = 1000;
+    this->data = new PII*[this->__size];
+    for (int i = 0; i < this->__size; i++) this->data[i] = nullptr;
+}
+
+HashTable::HashTable(HashFunc_T func) 
+: HashTable(func, nullptr, 1) {}
+
+HashTable::HashTable(IHashFunc &func) 
+: HashTable(nullptr, &func, 2) {}
+
+
+int &HashTable::operator[](int x) {//重载[]
+    int hash = 0;
+    switch (hash_type) {
+        case 1: hash = func1(x); break;
+        case 2: hash = (*func2)(x); break;
+    }
+    if (hash < 0) hash &= 0x7fffffff;
+    int ind = hash % __size, t = 1;
+    while (data[ind] && data[ind]->first != x) {
+        ind += t * t;
+        if (ind < 0) ind = ind & 0x7fffffff;
+        ind %= __size;
+        t += 1;
+    }
+    if (data[ind] == nullptr) data[ind] = new PII(x, 0);
+    return data[ind]->second;
+}
+
+} // end of namespace haizei
+
+int hash1(int x) {//普通函数
+    return (x << 1) ^ (x << 3) ^ (x >> 5);
+}
+
+class MyHashFunc : public haizei::IHashFunc {//传参函数
+public :
+    int operator()(int x) override {
+        return (x << 1) ^ (x << 3) ^ (x >> 5);
+    }
+};
+
+int main() {
+    MyHashFunc hash2;
+    haizei::HashTable h1(hash1);
+    haizei::HashTable h2(hash2);
+    h1[123] = 345;
+    h2[123] = 678;
+    cout << h1[123] << endl;
+    cout << h2[123] << endl;
+    cout << h1[789] << endl;
+    cout << h2[1000000] << endl;
+    return 0;
+}
+```
+
+
+
+
+
+### 类型转化
+
+```c++
+#include<iostream>
+#include<cstdio>
+#include<cmath>
+#include<cstring>
+#include<iomanip>
+#include<algorithm>
+#include<map>
+#include<vector>
+#include<set>
+using namespace std;
+
+class A{
+public:
+    virtual ~A(){
+
+    }
+private:
+
+};
+
+class B:public A{
+    public:
+    void sayB() {
+        cout << "this is class B, x = " << x  << endl;
+    }
+    int x;
+};
+class C:public A{
+    public :
+    void sayC() {
+        cout << "this is class C, x = " << x << endl;
+    }
+    double x;
+};
+class D:public A{
+    public :
+    void sayD() {
+        cout << "this is class D, x = " << x << endl;
+    }
+    string x;
+};
+
+
+int my_dynamic_cast(A *ta) {
+    char  **pa = (char **)(ta);
+    char  **pb = (char **)(new B());
+    char  **pc = (char **)(new C());
+    char  **pd = (char **)(new D());
+    int ret = -1;
+    if(pa[0] == pb[0]) ret = 0;
+    else if(pa[0] == pc[0]) ret = 1;
+    else if(pa[0] == pd[0]) ret = 2;
+    return ret;
+}
+
+int main() {
+    srand(time(0));
+    A *pa;
+    B *pb;
+    C *pc;
+    D *pd;
+    switch(rand() % 3) {
+        case 0 : pb = new B();pa = pb;pb->x = 123;break;
+        case 1 : pc = new C();pa = pc;pc->x = 45.6;break;
+        case 2 : pd = new D();pa = pd;pd->x = "hello haize";break;
+    }
+    if((pb = dynamic_cast<B *>(pa))) {
+        cout << "Class B : ";
+        pb->sayB();
+    } else if((pc = dynamic_cast<C *>(pa))) {
+        cout << "Class C : ";
+        pc->sayC();
+    } else if((pd = dynamic_cast<D *>(pa))) {
+        cout << "Class D : ";
+        pd->sayD();
+    }
+
+    switch(my_dynamic_cast(pa)) {
+        case 0: ((B *)(pa))->sayB();break;
+        case 1: ((C *)(pa))->sayC();break;
+        case 2: ((D *)(pa))->sayD();break;
+    }
+    return 0;
+}
+
+```
 
