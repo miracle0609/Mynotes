@@ -985,7 +985,7 @@ Cat是子类（派生类）
 
 Animal是父类（基类）
 
-
+![image-20200801150947920](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200801150947920.png)
 
 ### 继承-子类的访问权限
 
@@ -1157,6 +1157,65 @@ D destructor
 
 所以才引出：允许一个实体类，多个接口类
 
+![image-20200801154342587](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200801154342587.png)
+
+**指代不明**
+
+```c
+#include<iostream>
+#include<cstdio>
+#include<cmath>
+#include<cstring>
+#include<iomanip>
+#include<algorithm>
+#include<map>
+#include<vector>
+#include<set>
+using namespace std;
+
+struct A{
+    int x;
+};
+
+struct B : virtual public A{//解决菱形继承的问题使用virtual
+    void set(int x) {
+        this->x = x;
+        cout << "set :" << &this->x << endl;
+    }
+};
+
+
+struct C : virtual public A{
+    int get() {
+        cout << "get : " << &this->x << endl;
+        return this->x;
+    }
+};
+
+struct D : public B, public C{};
+
+int main() {
+    D d;
+    cout << sizeof(d) << endl;
+    d.set(9973);
+    cout << d.get() << endl;
+    return 0;
+}
+```
+
+```
+24
+set :0x7fffc89da2c0
+get : 0x7fffc89da2c0
+9973
+```
+
+解决方法用virtual,　合并产生冲突的父亲类
+
+![image-20200801154324483](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200801154324483.png)
+
+
+
 ### 继承下的拷贝构造
 
 ![image-20200727132324997](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200727132324997.png)
@@ -1217,6 +1276,85 @@ int main() {
 
 
 
+### string的简单实现
+
+```c++
+#include<iostream>
+#include<cstdio>
+#include<cmath>
+#include<cstring>
+#include<iomanip>
+#include<algorithm>
+#include<map>
+#include<vector>
+#include<set>
+using namespace std;
+
+namespace haizei {
+
+class string {
+public :
+    string() {
+        this->__buff_size = 10;
+        this->buff = new char[this->__buff_size];
+        this->__length = 0;
+    }
+    string(const char *str) {
+        this->__buff_size = strlen(str) + 1;
+        this->buff = new char[this->__buff_size];
+        strcpy(this->buff, str);
+        this->__length = this->__buff_size - 1;
+    }
+    char &at(int ind) {
+        if(ind < 0 || ind >= __length) {
+            cout << "String Error : out of range" << endl;
+            return __end;
+        }
+        return this->operator[](ind);
+    }
+    char &operator[](int ind) {
+        return buff[ind];
+    }
+    const char *c_str() const {
+        return buff;
+    }
+    string operator+(const string &s) {
+        int size = this->__length + s.__length + 1;
+        char *temp = new char[size];
+        strcpy(temp, this->buff);
+        strcat(temp, s.buff);
+        return temp;
+    }
+    int size() {return this->__length;}
+private:
+    int __length, __buff_size;
+    char *buff;
+    char __end;
+};
+
+}
+
+ostream &operator<<(ostream &out, const haizei::string &s) {
+    out << s.c_str() << endl;
+    return out;
+}
+
+
+int main() {
+    haizei::string s1 = "hello world", s2 = ", haizei", s3 = "harbin.";
+    cout << s1 << endl;
+    s1[3] = '6';
+    cout << s1 << endl;
+    cout << s1 + s2 + s3 <<endl;
+    for(int i = 0; i < s1.size(); i++) {
+       cout << s1[i] << endl; 
+    }
+    return 0;
+}
+```
+
+
+
 ## 多态
 
 ### 虚函数
@@ -1268,6 +1406,14 @@ int main() {
 override更加明确的告诉编译器覆盖父亲类的虚函数;起到报错作用.
 
 ### 虚继承&final关键字
+
+
+
+### 虚函数表
+
+![image-20200730153051831](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200730153051831.png)
+
+
 
 
 
