@@ -1770,3 +1770,90 @@ int main() {
 
 ```
 
+## 模板
+
+程序=算法＋数据结构
+
+数据机构：能够存储任意类型
+
+算法：能够操作存储任意类型数据结构
+
+### 泛型编程
+
+|              | 泛型编程           |
+| ------------ | ------------------ |
+| 面向过程编程 | 用模板实现函数过程 |
+| 面向对象编程 | 用模板实现类       |
+
+###　模板
+
+#### 模板函数
+
+```c++
+template<typename T>
+T add(T a, T b) {
+    return a + b;
+}
+```
+
+#### 模板类
+
+```c++
+template<typename T>
+struct PrintAny{
+    PrintAny(std::ostream &out) : out(out) {}
+    void operator()(const T &a) {
+        out << a;
+    }
+    std::ostream &out;
+};
+```
+
+#### 模板类＋模板函数
+
+```c++
+template<typename T>
+struct Print{
+    template<typename U>
+    void operator()(const U &a) {
+        cout << a << endl;
+        cout << this->__temp << endl;
+    }
+    void set(const T &temp) {this->__temp = temp;}
+    T __temp;
+};
+```
+
+### 模板的特化与偏特化
+
+#### 特化
+
+![image-20200802112825838](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200802112825838.png)
+
+![image-20200802113014638](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200802113014638.png)![image-20200802113041379](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200802113041379.png)
+
+####　偏特化
+
+![image-20200802113324083](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200802113324083.png)
+
+任意类型的指针类型
+
+#### 可变参模板
+
+```c++
+template<typename T, typename ...ARGS>
+void Print (const T &a, ARGS... args) {
+    cout << a << endl;
+    Print(args...);
+}
+```
+
+代码讲解: `ARGS`代表模板中剩余部分的类型数量是可变的，但是最少为１个，此代码会递归展开模板函数`Print`
+
+![image-20200802115107542](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200802115107542.png)
+
+![image-20200802115157228](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200802115157228.png)
+
+
+
+![image-20200802123438900](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200802123438900.png)

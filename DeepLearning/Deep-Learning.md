@@ -1,3 +1,4 @@
+   * 
    * [Deep-Learning](#deep-learning)
       * [1. 从数据挖掘到人工智能](#1-从数据挖掘到人工智能)
          * [1.1 人工智能萌芽与生长](#11-人工智能萌芽与生长)
@@ -213,3 +214,182 @@ with tf.Session() as sess:
 ![image-20200728131630528](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200728131630528.png)
 
 ![image-20200728131712094](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200728131712094.png)
+
+![image-20200802141537746](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200802141537746.png)
+
+
+
+
+
+两个向量a = [a1, a2,…, an]和b = [b1, b2,…, bn]的点积定义为：
+
+a·b=a1b1+a2b2+……+anbn。
+
+```c++
+#!/usr/bin/env python
+# coding=utf-8
+import tensorflow as tf
+print(tf.__version__)
+import numpy as np
+
+tf.reset_default_graph()
+x = tf.placeholder(tf.float32, None)#[None, 1000]
+y = tf.placeholder(tf.float32, None)#[None, 1000]
+z = tf.add(x, y)
+
+o = x * y
+print(o)
+
+with tf.Session() as sess:
+    writer = tf.summary.FileWriter('./graphs/',sess.graph)
+    print(sess.run([z, o], feed_dict={x : np.array([1.0, 2.0]), y : np.array([3.0, 4.0])}))
+    writer.close()
+
+```
+
+![image-20200802143842287](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200802143842287.png)
+
+一个加法一个乘法
+
+### 克罗内克积
+
+数学上，**克罗内克积**是两个任意大小的矩阵间的运算。克罗内克积是[张量积](https://baike.baidu.com/item/张量积/7540845)的特殊形式，以德国数学家利奥波德·克罗内克命名。
+
+![img](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/9a11ca04ce3305ddac60890565b4a87a.svg)
+
+ 如果*A*是一个*m*×*n*的矩阵，而*B*是一个*p*×*q*的矩阵，**克罗内克积**则是一个*mp*×*nq*的[分块矩阵](https://baike.baidu.com/item/分块矩阵)
+
+
+
+![img](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/ee5fe7b01d153a176997ba71b612920a.svg)
+
+
+
+
+
+![img](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/ea0ed842bbe8e34a6e80603b6434ece9.svg)
+
+
+
+## 从拟合到深度神经网络
+
+### 拟合与优化-寻找正解
+
+![image-20200802144529147](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200802144529147.png)
+
+数学拟合，第二定律中`a = F / m`
+
+#### **数学模型**
+
+![image-20200802145057763](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200802145057763.png)
+
+当成本函数最小的时候为趋近０，所以yi = h(xi)![image-20200802145349480](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200802145349480.png)
+
+因此使用二次元方式来预测，
+
+#### **梯度下降**
+
+梯度下降是迭代法的一种,可以用于求解最小二乘问题(线性和非线性都可以)。在求解机器学习算法的模型参数，即无约束优化问题时，梯度下降（Gradient Descent）是最常采用的方法之一，另一种常用的方法是最小二乘法。在求解损失函数的最小值时，可以通过梯度下降法来一步步的迭代求解，得到最小化的损失函数和模型参数值。反过来，如果我们需要求解损失函数的最大值，这时就需要用梯度上升法来迭代了。在机器学习中，基于基本的梯度下降法发展了两种梯度下降方法，分别为随机梯度下降法和批量梯度下降法。
+
+![image-20200802150528235](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200802150528235.png)**梯度下降法(gradient descent)**是一个[最优化](https://baike.baidu.com/item/最优化)算法，常用于机器学习和[人工智能](https://baike.baidu.com/item/人工智能/9180)当中用来递归性地逼近最小偏差模型。
+
+举一个非常简单的例子，如求函数
+
+![img](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/d28f3598a7e36298452ecfe451a35ab5.svg)
+
+ 的最小值。
+
+利用梯度下降的方法解题步骤如下：
+
+1、求梯度，![img](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/8a81c05d8c450aadab9085e9ab71d281.svg)
+2、向梯度相反的方向移动![img](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/4675185d7b4028ecceae6b1456352cd4.svg)，如下![img](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/771a2ba34fe23edd9669812df6c5d16e.svg)，其中，![img](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/74822649bb220e0bdde84e9532b80130.svg) 为步长。如果步长足够小，则可以保证每一次迭代都在减小，但可能导致收敛太慢，如果步长太大，则不能保证每一次迭代都减少，也不能保证收敛。
+
+3、循环迭代步骤2，直到![img](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/4675185d7b4028ecceae6b1456352cd4.svg) 的值变化到使得![img](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/ff00f7b7211e5b5454eccf5df11db931.svg)
+在两次迭代之间的差值足够小，比如0.00000001，也就是说，直到两次迭代计算出来的![img](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/ff00f7b7211e5b5454eccf5df11db931.svg)基本没有变化，则说明此时![img](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/ff00f7b7211e5b5454eccf5df11db931.svg) 已经达到局部最小值了。
+4、此时，输出![img](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/4675185d7b4028ecceae6b1456352cd4.svg)，这个![img](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/4675185d7b4028ecceae6b1456352cd4.svg)就是使得函数![img](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/ff00f7b7211e5b5454eccf5df11db931.svg)最小时的![img](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/4675185d7b4028ecceae6b1456352cd4.svg)的取值 。
+
+#### **牛顿法**
+
+![image-20200802151330296](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200802151330296.png)
+
+#### 动量的作用
+
+![image-20200802151806253](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200802151806253.png)
+
+
+
+#### 用多少数据优化参数?
+
+![image-20200802152821772](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200802152821772.png)
+
+![image-20200802153217774](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200802153217774.png)
+
+#### 学习速率的重要性
+
+![image-20200802153834028](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200802153834028.png)
+
+![image-20200802154116159](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200802154116159.png)
+
+
+
+### 神经网络
+
+#### 特征提取
+
+![image-20200802163525078](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200802163525078.png)
+
+#### 神经元
+
+![image-20200802163722940](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200802163722940.png)
+
+#### sigmoid和激活函数
+
+![image-20200802164108623](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200802164108623.png)
+
+#### ReLU
+
+![image-20200802164207983](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200802164207983.png)
+
+#### ReLU变种
+
+![image-20200802164410721](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200802164410721.png)
+
+
+
+#### 神经网络
+
+![image-20200802164516539](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200802164516539.png)
+
+![image-20200802164643407](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200802164643407.png)
+
+![image-20200802164735315](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200802164735315.png)
+
+#### 两种重要得神经网络
+
+![image-20200802164943119](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200802164943119.png)
+
+#### 正则化的目的
+
+![image-20200802165229494](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200802165229494.png)
+
+#### 模型的容量
+
+![image-20200802165350998](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200802165350998.png)
+
+![image-20200802165625188](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200802165625188.png)
+
+#### 修改成本函数
+
+![image-20200802165700290](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200802165700290.png)
+
+#### Early-Stopping
+
+![image-20200802165819192](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200802165819192.png)
+
+#### 参数共享
+
+![image-20200802165846916](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200802165846916.png)
+
+#### 实战经验
+
+![image-20200802170021995](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200802170021995.png)
