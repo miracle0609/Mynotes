@@ -1879,7 +1879,132 @@ int main() {
 }
 ```
 
+###　`nullptr`关键字
 
+NULL在C++与Ｃ之间的区别
+
+C++中NULL所带来的歧义：`func(int), func(int *)`
+
+`nullptr`是空指针更准确的、无歧义的语义表达
+
+nullptr是真正的空地址
+
+NULL是一个强转的0//(void *)0
+
+### override关键字
+
+override更加明确的告诉编译器覆盖父亲类的虚函数; 起到报错作用.
+
+```c++
+#include<iostream>
+#include<cstdio>
+#include<cmath>
+#include<cstring>
+#include<iomanip>
+#include<algorithm>
+#include<map>
+#include<vector>
+#include<set>
+using namespace std;
+
+int f(int x) {
+    cout << "output int value : ";
+    cout  << x << endl;
+    return 0;
+}
+
+int f(int *x) {
+    cout << "output address : ";
+    cout << x << endl;
+    return 0;
+}
+
+int main() {
+    printf("%lld", (long long)(nullptr));
+    //cout << nullptr << endl;
+    //cout << NULL << endl;
+    int n, *p = &n;
+    f(n);
+    f(p);
+    f(nullptr);//<---- 地址
+    f((int)NULL);//0 <---- 当成地址 (void *)0
+    return 0;
+}
+```
+
+### 右值引用
+
+![image-20200802201837950](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200802201837950.png)
+
+![image-20200802202252159](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200802202252159.png)
+
+
+
+同样的变量，单一方式，同样的结果；
+
+右值表临时；
+
+![image-20200802205005586](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200802205005586.png)
+
+
+
+```c
+#include <iostream>
+#include <cstdio>
+#include <cstdlib>
+#include <queue>
+#include <stack>
+#include <algorithm>
+#include <string>
+#include <map>
+#include <set>
+#include <vector>
+using namespace std;
+#define TEST(a, f) { \
+    cout << #a <<  " : " << #f << " "; \
+    f(a); \
+}
+
+void f2(int &x) {//左值引用
+    cout << "left value" << endl;
+}
+
+void f2(int &&x) {//右值引用
+    cout << "right value" << endl;
+}
+
+void f(int &x) {
+    cout << "left value" << endl;
+    TEST(move(x), f2);
+}
+
+void f(int &&x) {
+    cout << "right value" << endl;
+    //TEST(forward<int &&>(x), f2);//强制将x的属性传递下去
+    TEST(move(x), f2);//强制转换为右值传递下去
+}
+
+int main() {
+    int a, b = 1, c = 3;
+    (++a) = b + c;
+    cout << a << endl;
+    (a++);
+    (a = b) = c;
+    cout << a << " " << b << endl;
+    int arr[10];
+    arr[3] = 12;
+    (a += 3) = 67;
+    cout << a << endl;
+    TEST(a += 3, f);
+    TEST(1 + 4, f);
+    TEST(b + c, f);
+    TEST(a++, f);
+    TEST(++a, f);
+    return 0;
+}
+```
+
+区分处理流程，速度提升
 
 
 
