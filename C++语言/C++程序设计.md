@@ -1517,7 +1517,6 @@ int main() {
     delete ba;
 
 
-
     cout << sizeof(A) << endl;
     A temp_a, temp_b;
     temp_a.x = 9973;
@@ -1769,6 +1768,120 @@ int main() {
 }
 
 ```
+
+##　总结与思考
+
+![image-20200802185534116](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200802185534116.png)
+
+### auto关键字
+
+不能用于：
+
+函数参数
+
+模板参数
+
+定义数组
+
+非静态成员变量
+
+```c++
+如果表达式为数组，且auto带上&，则推导出的类型为数组类型，如：
+　　int32_t a[3] = {};
+　　auto& arr = a;
+　　std::cout <<typeid(arr).name() std::endl; // 这里输出int [3]
+```
+
+### constexpr关键字
+
+编译期常量
+
+![image-20200802190056679](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200802190056679.png)
+
+![image-20200802190131029](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200802190131029.png)
+
+12是编译期常量所以合法了
+
+
+
+普通变量，修饰函数，构造函数
+
+```c
+#include<iostream>
+#include<cstdio>
+#include<cmath>
+#include<cstring>
+#include<iomanip>
+#include<algorithm>
+#include<map>
+#include<vector>
+#include<set>
+using namespace std;
+
+constexpr int f(int x) {//修饰函数
+    if(x == 1) return 1;
+    return x * f(x - 1);
+}
+
+class A {
+    public:
+    constexpr A(int x,int y) : x(x), y(y) {}//修饰构造函数
+    int x, y;
+};
+
+int main() {
+    int n;
+    cin >> n;
+    cout << f(n) << endl;
+    constexpr int m = f(12);
+    cout << m << endl;
+    constexpr A a(2, 3);
+    cout << a.x << " "<< a.y << endl;
+    return 0;
+}
+```
+
+### final关键字
+
+防止子类的相关覆盖重写，防止子类的继承
+
+```c++
+class A :public  map<int, int> {
+    public :
+    virtual void say() {
+        cout << "Class A : hello world" << endl;
+    }
+};
+
+class B final : public A{
+    public : 
+    void say() final override{
+        cout << "Class B : hello world" << endl;
+    }
+};
+
+/*
+class C : public B{
+    public :
+    void say() override {
+        cout << "Class :hello world" << endl;
+    }
+};*/
+
+int main() {
+    A a;
+    a[123] =456;
+    a[987] = 46513;
+    for(auto x : a) {
+        cout << x.first << " " << x.second << endl;
+    }
+    return 0;
+}
+```
+
+
+
+
 
 ## 模板
 
