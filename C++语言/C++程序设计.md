@@ -2030,9 +2030,64 @@ int main() {
 ```c++
 template<typename T>
 T add(T a, T b) {
+    cout << "add function : " << sizeof(T) << endl;
     return a + b;
 }
+/*
+int add(int a, int b) {
+    cout << "add function : " << sizeof(T) << endl;
+    return a + b; 
+}
+*/
+int main() {
+    cout << add(2, 3) << endl;//当传入2, 3时此时模板会生成上面注释的那些代码,替换成真正存在的类型，模板帮我们生成相关的代码，真正编译的时候，模板没有任何作用。类似宏定义，但是比宏强大的多，模板类型抽象，代码逻辑；
+    cout << add(3.5, 6.7) << endl;
+}
 ```
+
+**问题一、**
+
+![image-20200803155855361](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200803155855361.png)
+
+![image-20200803155916241](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200803155916241.png)
+
+怎么解决32行问题，我们可以将32行转为double类型就不会报错了：
+![image-20200803160102330](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200803160102330.png)
+
+**问题二、**
+
+同样类型的模板是不是调用的同一个模板产出的代码呢 ? 验证
+
+```cpp
+template<typename T>
+T add(T a, T b) {
+    cout << "add function : " << sizeof(T) << endl;
+    static int i = 0;
+    cout <<"i : "<< (++i) << endl;
+    return a + b;
+}
+int main() {
+    cout << add(2, 3) << endl;
+    cout << add(2.3, 4.5) << endl;
+    cout << add<double>(2.3, 3) << endl;//与上一行调用同一个模板扩展出来的代码
+
+    return 0;
+}
+```
+
+>add function : 4
+>i : 1
+>5
+>add function : 8
+>i : 1
+>6.8
+>add function : 8
+>i : 2
+>5.3
+
+有结果可知，调用同一个模板扩展出来的代码，例子中两个double可以看出，模板只是制造作用
+
+
 
 #### 模板类
 
@@ -2045,6 +2100,49 @@ struct PrintAny{
     }
     std::ostream &out;
 };
+```
+
+```c++
+template<typename T>
+class Array {
+public:
+    Array(int n) : n(n) {
+        this->arr = new T[n];
+    }
+    T &operator[](int ind) {
+        if(ind < 0 || ind >= n) return this->__end;
+        return this->arr[ind];    
+    }
+    template<typename U>
+    friend ostream &operator<< (ostream &, const Array<U> &);
+private:
+    T *arr;
+    T __end;
+    int n;
+};
+
+template<typename T>
+ostream &operator<<(ostream &out, const Array<T> &a) {//重载输出
+    out << "Class Array : ";
+    for(int i = 0; i < a.n; i++) {
+        out << a.arr[i] << " " << endl;
+    }
+    return out;
+}
+
+int main() {
+    Array<int>a(10);//模板类
+    Array<double> b(10);
+    a[0] = 123;
+    a[-123] = 456;
+    for(int i = 0; i < 10; i++) {
+        b[i] = (rand() % 100)/100.0;
+    }
+    cout << a << endl;
+    cout << b << endl;
+    return 0;
+}
+
 ```
 
 #### 模板类＋模板函数
@@ -2070,11 +2168,58 @@ struct Print{
 
 ![image-20200802113014638](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200802113014638.png)![image-20200802113041379](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200802113041379.png)
 
+```c++
+template<>
+int add(int a, int b) {
+    cout << "specific template add function" << endl;
+    return a + b;
+}
+```
+
+```cpp
+template<>
+class Array<double> {
+public:
+    Array(int n) : n(n) {
+        cout << "double array template" << endl;
+        this->arr = new double[n];
+    }
+    double &operator[](int ind) {
+        if(ind < 0 || ind >= n) return this->__end;
+        return this->arr[ind];    
+    }
+    template<typename T>
+    friend ostream &operator<<(ostream &, const Array<T> &);
+private:
+    double *arr;
+    double __end;
+    int n;
+};
+```
+
+
+
 ####　偏特化
 
 ![image-20200802113324083](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200802113324083.png)
 
 任意类型的指针类型
+
+```cpp
+template<typename T>
+T add(T *a, T *b) {
+    cout << "T * add function" << endl;
+    return *a + *b;
+}
+int main() {
+int a_num = 123, b_num = 456;
+cout << add(&a_num, &b_num) << endl;
+}
+```
+
+
+
+
 
 #### 可变参模板
 
@@ -2095,3 +2240,62 @@ void Print (const T &a, ARGS... args) {
 
 
 ![image-20200802123438900](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200802123438900.png)
+
+```c
+#include<iostream>
+#include<cstdio>
+#include<cmath>
+#include<cstring>
+#include<iomanip>
+#include<algorithm>
+#include<map>
+#include<vector>
+#include<set>
+using namespace std;
+
+template<typename T>
+void print(const T &a) {
+    cout << a << endl;
+}
+
+template<typename T, typename ...ARGS>
+void print(const T &a, ARGS ...args) {
+    cout << a << " ";
+    print(args...);
+    return ;
+}
+
+template<int n, typename T, typename ...ARGS> 
+struct ARG {
+    typedef typename ARG<n - 1, ARGS...> ::getT getT;
+    typedef ARG<n - 1, ARGS...> N;
+};
+
+template<typename T, typename ...ARGS>
+struct ARG<0, T, ARGS...>{
+    typedef T getT;
+};
+
+template<typename T>
+struct ARG<0, T> {
+    typedef T getT;
+    typedef T finalT;
+};
+
+template<typename T, typename ...ARGS> class Test;
+template<typename T, typename ...ARGS>
+class Test<T(ARGS...)>{
+public:
+    T operator()(typename ARG<0, ARGS...>::getT a, typename ARG<1, ARGS...>::N::finalT b) {
+        return a + b;
+    }
+};
+
+int main() {
+    print(123, "hello world", 78, 1.05);
+    Test<int(double, float)> e;
+    cout << e(2.3, 4.5) << endl;
+    return 0;
+}
+```
+
