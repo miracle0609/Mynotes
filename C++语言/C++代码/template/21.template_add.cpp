@@ -17,7 +17,7 @@
 using namespace std;
 
 template<typename T, typename U>
-T add(T a, U b) {
+decltype(T() + U()) add(T a, U b) {
     return a + b;
 }
 int main() {
