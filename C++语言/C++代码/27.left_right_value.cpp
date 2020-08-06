@@ -40,6 +40,11 @@ void f(int &&x) {
     TEST(move(x), f2);
 }
 
+int test_func(const int &&x) {
+    cout << x << endl;
+    return 0;
+}
+
 int main() {
     int a, b = 1, c = 3;
     (++a) = b + c;
@@ -56,5 +61,7 @@ int main() {
     TEST(b + c, f);
     TEST(a++, f);
     TEST(++a, f);
+    test_func(move(a));
+
     return 0;
 }

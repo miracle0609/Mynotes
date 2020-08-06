@@ -714,6 +714,7 @@ public:
 private:
     string name;
 };
+
 People func() {
     People temp_a("fangsong");
     return temp_a;
@@ -2006,6 +2007,143 @@ int main() {
 
 区分处理流程，速度提升
 
+#### 移动构造拷贝
+
+```cpp
+    string(const string &s): __length(s.__length){
+        cout << "copy constructor" << endl;
+        this->__buff_size = s.__buff_size;        
+        this->buff = new char[s.__buff_size];
+        strcpy(this->buff, s.buff);
+    }
+
+    string (string &&s) { //O(1)，用于匿名变量直接的拷贝，把要释放的临时空间直接做成需要开辟的空间
+        cout<< "move constructor" << endl;
+        this->__buff_size = s.__buff_size;
+        this->__length = s.__length;
+        this->buff = s.buff;
+        s.buff = nullptr;
+    }
+```
+
+```c
+#include<iostream>
+#include<cstdio>
+#include<cmath>
+#include<cstring>
+#include<iomanip>
+#include<algorithm>
+#include<map>
+#include<vector>
+#include<set>
+using namespace std;
+
+namespace haizei {
+
+class string {
+public :
+    string() {
+        cout << "string :default constructor, " << this << endl;
+        this->__buff_size = 10;
+        this->buff = new char[this->__buff_size];
+        this->__length = 0;
+    }
+    string(const char *str) {
+        cout << "string :const char constructor, " << this << endl;
+        this->__buff_size = strlen(str) + 1;
+        this->buff = new char[this->__buff_size];
+        strcpy(this->buff, str);
+        this->__length = this->__buff_size - 1;
+    }
+
+    string(const string &s){
+        cout <<"copy constructor : " <<endl;
+        this->__buff_size = s.__buff_size;
+        this->__length = s.__length;
+        this->buff = new char[this->__buff_size];
+        strcpy(this->buff, s.buff);
+    }
+    string(string &&s){//用于匿名变量直接的拷贝，把要释放的临时空间直接做成需要开辟的空间
+        cout<< "move constructor" << endl;
+        this->__buff_size = s.__buff_size;
+        this->__length = s.__length;
+        this->buff = s.buff;
+        s.buff = nullptr;
+    }
+
+    char &at(int ind) {
+        if(ind < 0 || ind >= __length) {
+            cout << "String Error : out of range" << endl;
+            return __end;
+        }
+        return this->operator[](ind);
+    }
+    char &operator[](int ind) {
+        return buff[ind];
+    }
+    const char *c_str() const {
+        return buff;
+    }
+    string operator+(const string &s) {
+        int size = this->__length + s.__length + 1;
+        char *temp = new char[size];
+        strcpy(temp, this->buff);
+        strcat(temp, s.buff);
+        return temp;
+    }
+    int size() {return this->__length;}
+
+    ~string(){
+        cout << "string : destructor, " << this << endl;
+        if(this->buff) delete this->buff;
+    }
+
+
+friend istream &operator>>(istream &in, const haizei::string &s);
+
+private:
+    int __length, __buff_size;
+    char *buff;
+    char __end;
+};
+istream &operator>>(istream &in, const haizei::string &s) {
+    in >> s.buff;
+    return in;
+}
+
+}
+
+ostream &operator<<(ostream &out, const haizei::string &s) {
+    out << s.c_str() << endl;
+    return out;
+}
+
+
+int main() {
+    haizei::string s1 = "hello world", s2 = ", haizei", s3 = "harbin.";
+    cout << s1 << endl;
+    //cin >> s1;
+    cout <<"=====s4.being===="<< endl;
+    haizei::string s4 = s1 + s2 + s3;
+    haizei::string s5 = s4;
+    cout << s4 << endl;
+    cout << s5 << endl;
+    s4[3] = '=';
+    cout << s4 << endl;
+    cout << s5 << endl;
+    cout <<"====s4.end====" << endl;
+    s1[3] = '6';
+    cout << s1 << endl;
+    cout << s1 + s2 + s3 <<endl;
+    for(int i = 0; i < s1.size(); i++) {
+       cout << s1[i] << endl; 
+    }
+    return 0;
+}
+```
+
+
+
 
 
 ## 模板
@@ -2067,9 +2205,9 @@ T add(T a, T b) {
     return a + b;
 }
 int main() {
-    cout << add(2, 3) << endl;
+    cout << add(2, 3) << endl;//隐式推导
     cout << add(2.3, 4.5) << endl;
-    cout << add<double>(2.3, 3) << endl;//与上一行调用同一个模板扩展出来的代码
+    cout << add<double>(2.3, 3) << endl;//显式推导，与上一行调用同一个模板扩展出来的代码
 
     return 0;
 }
@@ -2086,6 +2224,17 @@ int main() {
 >5.3
 
 有结果可知，调用同一个模板扩展出来的代码，例子中两个double可以看出，模板只是制造作用
+
+#### `decltype`推导类型
+
+```cpp
+template<class T, class U>
+decltype(T() + U()) add(T a, U b) {
+    return a + b;
+}
+```
+
+
 
 
 
@@ -2145,6 +2294,123 @@ int main() {
 
 ```
 
+1. 类内
+
+```c
+class PrintAny {
+public:
+    template<typename T>
+    void operator()(const T &a) {
+        cout << a << endl;
+    }
+};
+PrintAny print3;//不用<int>
+PrintAny print4;
+PrintAny print5;
+```
+
+2. 类外
+
+```c
+template<typename T>
+class PrintAny {
+public:
+    void operator()(const T &a) {
+        cout << a << endl;
+    }
+};
+PrintAny<int> print1;//用<int>
+
+```
+
+在实例化的时候会生成代码：
+
+![image-20200806150053846](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200806150053846.png)
+
+
+
+![image-20200806152525179](http://test-fangsong-imgsubmit.oss-cn-beijing.aliyuncs.com/img/image-20200806152525179.png)
+
+
+
+模板在编译的时候进行展开，实例化出来的是具体的方法具体的类，在编译阶段的事情在链接阶段对重复的合并。
+
+
+
+template.h
+
+```c
+#ifndef _TEMPLATE_H
+#define _TEMPLATE_H
+template<typename T>
+T add(T a, T b) {
+    return a + b;
+}
+int func();
+#endif
+```
+
+test1.cpp
+
+```cpp
+#include<iostream>
+#include<cstdio>
+#include<cmath>
+#include<cstring>
+#include<iomanip>
+#include<algorithm>
+#include<map>
+#include<vector>
+#include<set>
+#include"template.h"
+using namespace std;
+int main() {
+    cout << add(2, 3) << endl;
+    return 0;
+}
+```
+
+test2.cpp
+
+```cpp
+#include<iostream>
+#include<cstdio>
+#include<cmath>
+#include<cstring>
+#include<iomanip>
+#include<algorithm>
+#include<map>
+#include<vector>
+#include<set>
+#include"template.h"
+
+int func() {
+    return add(123, 456);
+}
+```
+
+gcc -c test1.cpp//生成了test1.o
+
+gcc -c test2.cpp//生成了test2.o
+
+gcc test1.o test2.o//链接在一起
+
+nm -C test1.o //看生成的目标程序
+
+>1.预处理 选项 gcc -E test.c -o test.c
+>
+>预处理完成就停下来，产生结果放在test.i文件中。
+>
+>2.编译 选项 gcc -S test.c
+>
+>编译完成之后就停下来，结果保存在test.s中。
+>
+>3.编译 gcc -C test.c
+>
+>汇编完成之后就停下来，结果保存在test.o中。
+
+
+
 #### 模板类＋模板函数
 
 ```c++
@@ -2197,6 +2463,62 @@ private:
 };
 ```
 
+对某些特定的类型进行特化版本的书写；
+
+
+
+#### add实现
+
+```cpp
+#include<iostream>
+#include<cstdio>
+#include<cmath>
+#include<cstring>
+#include<iomanip>
+#include<algorithm>
+#include<map>
+#include<vector>
+#include<set>
+using namespace std;
+
+class A{
+    public:
+    A(int x) : x(x) {}
+    int x;
+};
+class B{
+    public:
+    B(int y) : y(y) {}
+    int y;
+};
+int operator+(const A &a, const B &b) {
+    return a.x + b.y;
+}
+
+
+template<class T, class U>
+auto add(T a, U b) -> decltype(a + b) {//推导返回值类型，解决类对象相加问题
+    return a + b;
+}
+
+
+int main() {
+    A a(1000);
+    B b(645);
+    cout << a + b << endl;
+    cout << add(2, 3) << endl;//隐式推导
+    cout << add(3.5, 4.5) << endl;
+    cout << add<double>(4, 5.5) << endl;//显式推导
+    cout << add(a, b) << endl;
+    
+    cout << max(4, 3) << endl;
+    cout << max<double>(4.3, 3) << endl;//标准库中的一个bug解决
+
+    return 0;
+}
+
+```
+
 
 
 ####　偏特化
@@ -2209,11 +2531,24 @@ private:
 template<typename T>
 T add(T *a, T *b) {
     cout << "T * add function" << endl;
-    return *a + *b;
+    return *a + *b;//有问题的
 }
 int main() {
 int a_num = 123, b_num = 456;
 cout << add(&a_num, &b_num) << endl;
+}
+```
+
+```cpp
+template<class T, class U>//类偏特化
+auto add(T *a, U *b) -> decltype(*a + *b) {
+    return add(*a, *b);//未解决二维指针问题
+}
+
+template<>
+int add(int a, int b) {//特化
+    cout << "add int : " <<a <<" "<< b <<  endl;
+    return a + b;
 }
 ```
 
